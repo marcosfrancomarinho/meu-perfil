@@ -5,7 +5,7 @@ const links = [
   {
     title: 'LinkedIn',
     description: 'Vamos trocar ideias e conexões',
-    href: 'https://www.linkedin.com/in/marcos-franco-marinho-031b55187/',
+    href: 'https://www.linkedin.com/in/marcos-franco-marinho-031b55187?utm_source=share_via&utm_content=profile&utm_medium=member_android',
     icon: BriefcaseBusiness,
   },
   {
