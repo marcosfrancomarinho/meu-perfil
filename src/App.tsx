@@ -204,7 +204,7 @@ export function App() {
             loading='lazy'
             width={160}
             height={160}
-            className='relative h-28 w-28 rounded-full border-4 border-blue-500 object-cover shadow-[0_0_50px_rgba(59,130,246,.45)] sm:h-40 sm:w-40'
+            className='relative h-40 w-40 rounded-full border-4 border-blue-500 object-cover shadow-[0_0_50px_rgba(59,130,246,.45)] sm:h-50 sm:w-50'
           />
         </motion.div>
 
