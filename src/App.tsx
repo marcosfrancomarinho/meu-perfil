@@ -48,7 +48,7 @@ const techs = [
   'TypeScript',
   'Golang',
   'Python',
-  'Node.js',
+  'Node',
   'Spring Boot',
   'NestJS',
   'React',
