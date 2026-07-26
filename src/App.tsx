@@ -56,6 +56,7 @@ const techs = [
   'Clean Architecture',
   'SOLID',
   'Design Patterns',
+  'DDD'
 ];
 
 const PARTICLE_COUNT = 18;
