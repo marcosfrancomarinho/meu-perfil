@@ -52,7 +52,6 @@ const techs = [
   'Spring Boot',
   'NestJS',
   'React',
-  'TailwindCSS',
   'Clean Architecture',
   'SOLID',
   'Design Patterns',
