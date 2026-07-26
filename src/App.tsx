@@ -52,10 +52,10 @@ const techs = [
   'Spring Boot',
   'NestJS',
   'React',
+  'DDD',
   'Clean Architecture',
   'SOLID',
-  'Design Patterns',
-  'DDD'
+  'Design Patterns'
 ];
 
 const PARTICLE_COUNT = 18;
