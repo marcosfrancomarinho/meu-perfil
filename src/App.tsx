@@ -24,8 +24,8 @@ const links: LinkItem[] = [
 
   {
     title: 'Olá Mundo!',
-    description: 'Compartilhando programação por hobby.',
-    href: 'https://www.instagram.com/_ola_mundo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
+    description: 'Programação por hobby.',
+    href: 'https://www.instagram.com/_ola_mundo?utm_source=qr&igsh=c2Rnemkzam1rbjdk',
     icon: FaInstagram,
     color: 'pink',
   },
