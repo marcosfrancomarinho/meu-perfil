@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { ArrowUpRight, BriefcaseBusiness, Code2, Mail, Sparkles } from 'lucide-react';
-import { FaSpotify } from 'react-icons/fa';
+import { FaSpotify, FaInstagram } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-type ColorKey = 'blue' | 'violet' | 'amber' | 'green';
+type ColorKey = 'blue' | 'violet' | 'amber' | 'green' | 'pink';
 
 interface LinkItem {
   title: string;
@@ -21,9 +21,17 @@ const links: LinkItem[] = [
     icon: BriefcaseBusiness,
     color: 'blue',
   },
+
+  {
+    title: 'Olá Mundo!',
+    description: 'Compartilhando programação por hobby.',
+    href: 'https://www.instagram.com/_ola_mundo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
+    icon: FaInstagram,
+    color: 'pink',
+  },
   {
     title: 'GitHub',
-    description: 'Meus projetos  e alguns experimentos',
+    description: 'Meus projetos e alguns experimentos',
     href: 'https://github.com/marcosfrancomarinho',
     icon: Code2,
     color: 'violet',
@@ -43,7 +51,6 @@ const links: LinkItem[] = [
     color: 'green',
   },
 ];
-
 const techs = [
   'TypeScript',
   'Golang',
@@ -55,7 +62,7 @@ const techs = [
   'DDD',
   'Clean Architecture',
   'SOLID',
-  'Design Patterns'
+  'Design Patterns',
 ];
 
 const PARTICLE_COUNT = 18;
@@ -80,6 +87,11 @@ const colorThemes: Record<ColorKey, { border: string; icon: string; bg: string }
     border: 'hover:border-green-500/60',
     icon: 'text-green-400',
     bg: 'bg-green-500/10',
+  },
+  pink: {
+    border: 'hover:border-pink-500/60',
+    icon: 'text-pink-400',
+    bg: 'bg-pink-500/10',
   },
 };
 
