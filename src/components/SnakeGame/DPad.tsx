@@ -1,5 +1,5 @@
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { Direction } from '../../../../hooks/useSnakeGame';
+import type { Direction } from '../../hooks/useSnakeGame.ts';
 
 interface DPadProps {
   onPress: (direction: Direction) => void;
