@@ -10,8 +10,9 @@ export interface Position {
 export const GRID_SIZE = 15;
 
 const INITIAL_SPEED_MS = 170;
-const MIN_SPEED_MS = 75;
-const SPEED_STEP_MS = 7;
+const MIN_SPEED_MS = 90;
+const SPEED_STEP_MS = 3;
+const POINTS_PER_SPEED_UP = 2;
 
 const OPPOSITE: Record<Direction, Direction> = {
   UP: 'DOWN',
@@ -77,7 +78,7 @@ export function useSnakeGame() {
     nextDirectionRef.current = 'RIGHT';
   }, []);
 
-  const speed = Math.max(MIN_SPEED_MS, INITIAL_SPEED_MS - score * SPEED_STEP_MS);
+  const speed = Math.max(MIN_SPEED_MS, INITIAL_SPEED_MS - Math.floor(score / POINTS_PER_SPEED_UP) * SPEED_STEP_MS);
 
   useEffect(() => {
     if (!isRunning || isGameOver) return;

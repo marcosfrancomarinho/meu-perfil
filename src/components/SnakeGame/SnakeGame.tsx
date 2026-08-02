@@ -66,7 +66,7 @@ export function SnakeGame() {
 
       <div className='relative mt-4'>
         <div
-          className='mx-auto grid aspect-square w-full max-w-xs gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:max-w-sm sm:rounded-2xl'
+          className='mx-auto grid aspect-square w-full max-w-md gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:rounded-2xl'
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
         >
           {Array.from({ length: gridSize * gridSize }, (_, index) => {
