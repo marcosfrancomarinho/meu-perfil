@@ -29,7 +29,7 @@ export function App() {
 
         <LinksList links={links} />
 
-        <SnakeGame techs={techs} />
+        <SnakeGame />
 
         <AppFooter name='Marcos Franco Marinho' year={currentYear} />
       </div>

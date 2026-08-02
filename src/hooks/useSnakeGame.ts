@@ -26,7 +26,6 @@ function toKey(pos: Position) {
 
 function getInitialSnake(): Position[] {
   const mid = Math.floor(GRID_SIZE / 2);
-
   return [
     { x: mid, y: mid },
     { x: mid - 1, y: mid },
@@ -36,49 +35,28 @@ function getInitialSnake(): Position[] {
 
 function randomEmptyCell(occupied: Set<string>): Position {
   let position: Position;
-
   do {
     position = {
       x: Math.floor(Math.random() * GRID_SIZE),
       y: Math.floor(Math.random() * GRID_SIZE),
     };
   } while (occupied.has(toKey(position)));
-
   return position;
 }
 
-export function useSnakeGame(techs: string[]) {
-  const initialSnake = getInitialSnake();
-
-  const [snake, setSnake] = useState<Position[]>(initialSnake);
-
-  const [food, setFood] = useState<Position>(() => randomEmptyCell(new Set(initialSnake.map(toKey))));
-
+export function useSnakeGame() {
+  const [snake, setSnake] = useState<Position[]>(getInitialSnake);
+  const [food, setFood] = useState<Position>(() => randomEmptyCell(new Set(getInitialSnake().map(toKey))));
   const [score, setScore] = useState(0);
-
-  const [collectedTechs, setCollectedTechs] = useState<string[]>([]);
-
   const [isGameOver, setIsGameOver] = useState(false);
-
   const [isRunning, setIsRunning] = useState(false);
-
   const [hasStarted, setHasStarted] = useState(false);
 
-  // Estado usado para renderizar a próxima tecnologia
-  const [foodIndex, setFoodIndex] = useState(0);
-
-  // Refs usados apenas pela lógica do jogo
   const directionRef = useRef<Direction>('RIGHT');
-
   const nextDirectionRef = useRef<Direction>('RIGHT');
 
-  const foodIndexRef = useRef(0);
-
   const setDirection = useCallback((direction: Direction) => {
-    if (OPPOSITE[direction] === directionRef.current) {
-      return;
-    }
-
+    if (OPPOSITE[direction] === directionRef.current) return;
     nextDirectionRef.current = direction;
   }, []);
 
@@ -89,144 +67,69 @@ export function useSnakeGame(techs: string[]) {
 
   const reset = useCallback(() => {
     const initial = getInitialSnake();
-
     setSnake(initial);
-
     setFood(randomEmptyCell(new Set(initial.map(toKey))));
-
     setScore(0);
-
-    setCollectedTechs([]);
-
     setIsGameOver(false);
-
     setIsRunning(true);
-
     setHasStarted(true);
-
     directionRef.current = 'RIGHT';
-
     nextDirectionRef.current = 'RIGHT';
-
-    foodIndexRef.current = 0;
-
-    setFoodIndex(0);
   }, []);
 
   const speed = Math.max(MIN_SPEED_MS, INITIAL_SPEED_MS - score * SPEED_STEP_MS);
 
   useEffect(() => {
-    if (!isRunning || isGameOver) {
-      return;
-    }
+    if (!isRunning || isGameOver) return;
 
     const tick = () => {
       directionRef.current = nextDirectionRef.current;
 
       setSnake((prev) => {
         const head = prev[0];
+        let newHead: Position = head;
 
-        let newHead = head;
-
-        switch (directionRef.current) {
-          case 'UP':
-            newHead = {
-              x: head.x,
-              y: head.y - 1,
-            };
-            break;
-
-          case 'DOWN':
-            newHead = {
-              x: head.x,
-              y: head.y + 1,
-            };
-            break;
-
-          case 'LEFT':
-            newHead = {
-              x: head.x - 1,
-              y: head.y,
-            };
-            break;
-
-          case 'RIGHT':
-            newHead = {
-              x: head.x + 1,
-              y: head.y,
-            };
-            break;
-        }
+        if (directionRef.current === 'UP') newHead = { x: head.x, y: head.y - 1 };
+        if (directionRef.current === 'DOWN') newHead = { x: head.x, y: head.y + 1 };
+        if (directionRef.current === 'LEFT') newHead = { x: head.x - 1, y: head.y };
+        if (directionRef.current === 'RIGHT') newHead = { x: head.x + 1, y: head.y };
 
         const hitWall = newHead.x < 0 || newHead.x >= GRID_SIZE || newHead.y < 0 || newHead.y >= GRID_SIZE;
-
         const hitSelf = prev.some((segment) => segment.x === newHead.x && segment.y === newHead.y);
 
         if (hitWall || hitSelf) {
           setIsGameOver(true);
-
           setIsRunning(false);
-
           return prev;
         }
 
         const ateFood = newHead.x === food.x && newHead.y === food.y;
-
         const nextBody = [newHead, ...prev];
 
         if (ateFood) {
-          const tech = techs[foodIndexRef.current % techs.length];
-
-          setCollectedTechs((prevTechs) => [...prevTechs, tech]);
-
-          setScore((value) => value + 1);
-
-          foodIndexRef.current += 1;
-
-          setFoodIndex(foodIndexRef.current);
-
+          setScore((prevScore) => prevScore + 1);
           setFood(randomEmptyCell(new Set(nextBody.map(toKey))));
-
           return nextBody;
         }
 
         nextBody.pop();
-
         return nextBody;
       });
     };
 
     const interval = setInterval(tick, speed);
-
     return () => clearInterval(interval);
-  }, [isRunning, isGameOver, food, speed, techs]);
-
-  // Agora leitura segura no render
-  const nextTech = techs[foodIndex % techs.length];
+  }, [isRunning, isGameOver, food, speed]);
 
   return {
     snake,
-
     food,
-
     score,
-
-    collectedTechs,
-
     isGameOver,
-
-    isRunning,
-
     hasStarted,
-
-    nextTech,
-
     gridSize: GRID_SIZE,
-
     setDirection,
-
     start,
-
     reset,
   };
 }

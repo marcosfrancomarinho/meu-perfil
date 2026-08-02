@@ -1,12 +1,8 @@
 import { useEffect } from 'react';
 import { Gamepad2, RotateCcw, Skull } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSnakeGame, type Direction } from "../../hooks/useSnakeGame.ts";
-import { DPad } from './DPad.tsx';
-
-interface SnakeGameProps {
-  techs: string[];
-}
+import { useSnakeGame, type Direction } from '../../hooks/useSnakeGame';
+import { DPad } from './DPad';
 
 const KEY_MAP: Record<string, Direction> = {
   ArrowUp: 'UP',
@@ -19,20 +15,8 @@ const KEY_MAP: Record<string, Direction> = {
   d: 'RIGHT',
 };
 
-export function SnakeGame({ techs }: SnakeGameProps) {
-  const {
-    snake,
-    food,
-    score,
-    collectedTechs,
-    isGameOver,
-    hasStarted,
-    nextTech,
-    gridSize,
-    setDirection,
-    start,
-    reset,
-  } = useSnakeGame(techs);
+export function SnakeGame() {
+  const { snake, food, score, isGameOver, hasStarted, gridSize, setDirection, start, reset } = useSnakeGame();
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -64,7 +48,7 @@ export function SnakeGame({ techs }: SnakeGameProps) {
           </div>
           <div>
             <h3 className='text-sm font-semibold sm:text-base'>Jogo da cobrinha</h3>
-            <p className='text-[11px] text-zinc-500 sm:text-xs'>Coma as techs sem bater na parede</p>
+            <p className='text-[11px] text-zinc-500 sm:text-xs'>Só por diversão mesmo 🐍</p>
           </div>
         </div>
 
@@ -78,10 +62,7 @@ export function SnakeGame({ techs }: SnakeGameProps) {
         </button>
       </div>
 
-      <div className='mt-3 flex items-center justify-between text-[11px] text-zinc-500 sm:text-xs'>
-        <span>Pontos: {score}</span>
-        <span className='truncate'>Próxima: {nextTech}</span>
-      </div>
+      <div className='mt-3 text-[11px] text-zinc-500 sm:text-xs'>Pontos: {score}</div>
 
       <div className='relative mt-4'>
         <div
@@ -149,7 +130,7 @@ export function SnakeGame({ techs }: SnakeGameProps) {
                 <Skull size={26} />
               </motion.div>
               <p className='text-sm font-semibold sm:text-base'>Game over 💀</p>
-              <p className='text-xs text-zinc-400 sm:text-sm'>Você coletou {score} techs</p>
+              <p className='text-xs text-zinc-400 sm:text-sm'>Pontuação final: {score}</p>
               <button
                 type='button'
                 onClick={reset}
@@ -166,20 +147,7 @@ export function SnakeGame({ techs }: SnakeGameProps) {
         <DPad onPress={setDirection} />
       </div>
 
-      {collectedTechs.length > 0 && (
-        <div className='mt-4 flex flex-wrap justify-center gap-1.5 border-t border-zinc-800 pt-4'>
-          {collectedTechs.map((tech, index) => (
-            <span
-              key={`${tech}-${index}`}
-              className='rounded-full border border-zinc-800 bg-zinc-900 px-2.5 py-1 text-[10px] text-zinc-400 sm:text-xs'
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <p className='mt-3 hidden text-center text-[11px] text-zinc-600 sm:block'>
+      <p className='mt-4 hidden text-center text-[11px] text-zinc-600 sm:block'>
         Use as setas do teclado ou W A S D
       </p>
     </motion.section>
