@@ -33,7 +33,7 @@ export const links: LinkItem[] = [
   },
   {
     title: 'Spotify',
-    description: 'A trilha sonora para as segundas-feiras',
+    description: 'A melhores músicas catalogadas',
     href: 'https://open.spotify.com/playlist/47f2vCrvOn7hSKpaMMz2vw?si=SBx9yelwR4uBvJHSt5gq-g&utm_source=whatsapp&pi=UQBnD7GuQ7SIc',
     icon: FaSpotify,
     color: 'green',
