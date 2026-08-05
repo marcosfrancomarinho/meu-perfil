@@ -15,6 +15,16 @@ const KEY_MAP: Record<string, Direction> = {
   d: 'RIGHT',
 };
 
+const START_ICON_CELLS = [
+  { x: 15, y: 55, delay: 0.15 },
+  { x: 30, y: 55, delay: 0.22 },
+  { x: 30, y: 40, delay: 0.29 },
+  { x: 30, y: 25, delay: 0.36 },
+  { x: 45, y: 25, delay: 0.43 },
+  { x: 60, y: 25, delay: 0.5 },
+  { x: 60, y: 40, delay: 0.57 },
+];
+
 export function SnakeGame() {
   const { snake, food, score, isGameOver, hasStarted, gridSize, setDirection, start, reset } = useSnakeGame();
 
@@ -98,19 +108,77 @@ export function SnakeGame() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl bg-zinc-950/90 px-4 text-center backdrop-blur-sm sm:rounded-2xl'
+              className='absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl bg-zinc-950/95 px-6 text-center backdrop-blur-sm sm:rounded-2xl'
             >
-              <p className='text-sm font-semibold sm:text-base'>Pronto para jogar?</p>
-              <p className='max-w-[220px] text-xs text-zinc-400 sm:text-sm'>
-                Use as setas do teclado (ou o D-pad no celular) para guiar a cobrinha
-              </p>
-              <button
+              <div
+                className='pointer-events-none absolute inset-0 opacity-[0.07]'
+                style={{
+                  backgroundImage:
+                    'linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)',
+                  backgroundSize: '24px 24px',
+                }}
+              />
+
+              <motion.div
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 180, delay: 0.1 }}
+                className='relative flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28'
+              >
+                <motion.div
+                  animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.12, 1] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                  className='absolute inset-0 rounded-full bg-green-500/25 blur-2xl'
+                />
+
+                <svg viewBox='0 0 100 100' className='relative h-16 w-16 sm:h-20 sm:w-20' fill='none'>
+                  {START_ICON_CELLS.map((cell, index) => (
+                    <motion.rect
+                      key={`${cell.x}-${cell.y}`}
+                      x={cell.x}
+                      y={cell.y}
+                      width='13'
+                      height='13'
+                      rx='2'
+                      fill={index === START_ICON_CELLS.length - 1 ? '#4ade80' : '#16a34a'}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: cell.delay, type: 'spring', stiffness: 260 }}
+                    />
+                  ))}
+
+                  <motion.rect
+                    x='75'
+                    y='40'
+                    width='11'
+                    height='11'
+                    rx='2'
+                    fill='#60a5fa'
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: [0, 1, 1], scale: [0, 1.3, 1] }}
+                    transition={{ delay: 0.65, duration: 0.5 }}
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(96,165,250,.9))' }}
+                  />
+                </svg>
+              </motion.div>
+
+              <div className='relative space-y-1.5'>
+                <p className='text-base font-semibold sm:text-lg'>Pronto para jogar?</p>
+                <p className='max-w-[240px] text-xs text-zinc-400 sm:text-sm'>
+                  Use as setas do teclado (ou o D-pad no celular) para guiar a cobrinha
+                </p>
+              </div>
+
+              <motion.button
                 type='button'
                 onClick={start}
-                className='mt-1 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs text-green-300 transition hover:bg-green-500/20 sm:text-sm'
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                className='relative mt-1 flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_25px_rgba(74,222,128,.4)] transition sm:text-base'
               >
+                <Gamepad2 size={16} />
                 Começar
-              </button>
+              </motion.button>
             </motion.div>
           )}
 
@@ -147,9 +215,7 @@ export function SnakeGame() {
         <DPad onPress={setDirection} />
       </div>
 
-      <p className='mt-4 hidden text-center text-[11px] text-zinc-600 sm:block'>
-        Use as setas do teclado ou W A S D
-      </p>
+      <p className='mt-4 hidden text-center text-[11px] text-zinc-600 sm:block'>Use as setas do teclado ou W A S D</p>
     </motion.section>
   );
 }
