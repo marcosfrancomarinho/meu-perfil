@@ -9,7 +9,7 @@ export interface Position {
 
 export const GRID_SIZE = 15;
 
-const INITIAL_SPEED_MS = 170;
+const INITIAL_SPEED_MS = 220;
 const MIN_SPEED_MS = 90;
 const SPEED_STEP_MS = 3;
 const POINTS_PER_SPEED_UP = 2;
