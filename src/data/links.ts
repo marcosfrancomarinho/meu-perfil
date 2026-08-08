@@ -1,5 +1,5 @@
 import { BriefcaseBusiness, Code2, Mail } from 'lucide-react';
-import { FaSpotify, FaInstagram } from 'react-icons/fa';
+import { FaSpotify } from 'react-icons/fa';
 import type { LinkItem } from '../types';
 
 export const links: LinkItem[] = [
