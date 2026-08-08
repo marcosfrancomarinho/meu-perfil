@@ -11,13 +11,6 @@ export const links: LinkItem[] = [
     color: 'blue',
   },
   {
-    title: 'Olá Mundo!',
-    description: 'Entendendo o mundo da programação',
-    href: 'https://www.instagram.com/_ola_mundo/',
-    icon: FaInstagram,
-    color: 'pink',
-  },
-  {
     title: 'GitHub',
     description: 'Meus projetos e alguns experimentos',
     href: 'https://github.com/marcosfrancomarinho',
