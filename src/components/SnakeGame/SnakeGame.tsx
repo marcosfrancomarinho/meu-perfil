@@ -57,7 +57,7 @@ export function SnakeGame() {
             <Gamepad2 size={18} className='sm:size-5' />
           </div>
           <div>
-            <h3 className='text-sm font-semibold sm:text-base'>Jogo da cobrinha</h3>
+            <h3 className='text-sm font-semibold sm:text-base'>Snake Game</h3>
             <p className='text-[11px] text-zinc-500 sm:text-xs'>Só por diversão mesmo 🐍</p>
           </div>
         </div>
