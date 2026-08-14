@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
-export type RewardId = 'starter' | 'blue-skin' | 'master';
+export type RewardId = 'starter' | 'blue-skin' | 'master' | 'golden-food';
 
 export interface Position {
   x: number;
@@ -42,6 +42,12 @@ const REWARDS: SnakeReward[] = [
     score: 20,
     title: 'Mestre da Cobrinha!',
     description: 'A cobrinha violeta foi desbloqueada.',
+  },
+  {
+    id: 'golden-food',
+    score: 30,
+    title: 'Comida dourada!',
+    description: 'Pegue o bônus especial para ganhar 3 pontos.',
   },
 ];
 
@@ -105,6 +111,7 @@ export function useSnakeGame() {
   const [highScore, setHighScore] = useState(getStoredHighScore);
   const [unlockedRewardIds, setUnlockedRewardIds] = useState<RewardId[]>(storedRewards.current);
   const [latestReward, setLatestReward] = useState<SnakeReward | null>(null);
+  const [isGoldenFood, setIsGoldenFood] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
@@ -144,6 +151,7 @@ export function useSnakeGame() {
     setFood(randomEmptyCell(new Set(initialSnake.map(toKey))));
     setScore(0);
     setLatestReward(null);
+    setIsGoldenFood(false);
     setIsGameOver(false);
     setIsRunning(true);
     setHasStarted(true);
@@ -197,7 +205,8 @@ export function useSnakeGame() {
 
         if (ateFood) {
           setScore((currentScore) => {
-            const nextScore = currentScore + 1;
+            const earnedPoints = isGoldenFood ? 3 : 1;
+            const nextScore = currentScore + earnedPoints;
             const unlockedReward = REWARDS.find(
               (reward) =>
                 reward.score === nextScore &&
@@ -210,6 +219,12 @@ export function useSnakeGame() {
               setUnlockedRewardIds(nextRewards);
               setLatestReward(unlockedReward);
               window.localStorage.setItem(REWARDS_KEY, JSON.stringify(nextRewards));
+            }
+
+            if (isGoldenFood) {
+              setIsGoldenFood(false);
+            } else if (nextScore === 30) {
+              setIsGoldenFood(true);
             }
 
             setHighScore((currentHighScore) => {
@@ -232,7 +247,7 @@ export function useSnakeGame() {
 
     const interval = window.setInterval(tick, speed);
     return () => window.clearInterval(interval);
-  }, [food, isGameOver, isRunning, speed]);
+  }, [food, isGameOver, isGoldenFood, isRunning, speed]);
 
   return {
     snake,
@@ -242,6 +257,7 @@ export function useSnakeGame() {
     level,
     latestReward,
     unlockedRewardIds,
+    isGoldenFood,
     isGameOver,
     isPaused,
     hasStarted,
