@@ -1,29 +1,33 @@
-# 👨‍💻 Meu Perfil
+# 👋 Meu Perfil
 
-Página pessoal de desenvolvedor construída com **React, TypeScript, Vite e Tailwind CSS** para apresentar perfil, stack, links profissionais e uma experiência interativa.
+Uma página pessoal, simples e interativa para reunir um pouco sobre mim, as tecnologias que gosto, meus links e uma partida de Snake.
 
-O projeto inclui também um **jogo da cobrinha** integrado à página.
+A proposta não é ser um portfólio formal: é criar uma experiência leve que qualquer pessoa consiga entender e explorar.
 
-## ✨ Recursos
+## ✨ O que você encontra
 
-- Apresentação profissional
-- Stack de tecnologias
-- Links para redes e portfólio
-- Animações e partículas visuais
-- Jogo da cobrinha integrado
-- Layout responsivo
+- Uma apresentação pessoal e acolhedora;
+- tecnologias e conceitos que fazem parte do meu dia a dia;
+- links para LinkedIn, GitHub, e-mail e Spotify;
+- animações e partículas visuais;
+- Snake Game jogável pelo teclado ou celular;
+- layout responsivo;
+- suporte à redução de movimentos;
+- metadados para busca e compartilhamento.
 
 ## 🛠️ Tecnologias
 
-<div><img src="https://skillicons.dev/icons?i=react,typescript,vite,tailwind" /></div>
+<div>
+  <img src="https://skillicons.dev/icons?i=react,typescript,vite,tailwind" alt="React, TypeScript, Vite e Tailwind CSS" />
+</div>
 
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS 4
-- Framer Motion
-- Lucide React
-- React Icons
+- React 19;
+- TypeScript;
+- Vite;
+- Tailwind CSS 4;
+- Framer Motion;
+- Lucide React;
+- React Icons.
 
 ## ⚙️ Executando localmente
 
@@ -34,10 +38,15 @@ npm install
 npm run dev
 ```
 
-## 💡 Objetivo
+## 📜 Scripts
 
-Projeto criado como página pessoal e portfólio interativo, reunindo apresentação profissional, tecnologias e elementos visuais em uma única experiência.
+| Comando | Descrição |
+| --- | --- |
+| `npm run dev` | Inicia o ambiente de desenvolvimento |
+| `npm run build` | Valida o TypeScript e gera o build |
+| `npm run lint` | Executa a análise estática |
+| `npm run preview` | Visualiza localmente o build |
 
 ## 👨‍💻 Autor
 
-**Marcos Franco Marinho** — https://github.com/marcosfrancomarinho
+**Marcos Franco Marinho** — [GitHub](https://github.com/marcosfrancomarinho)
