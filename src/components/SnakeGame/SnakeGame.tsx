@@ -68,6 +68,7 @@ export function SnakeGame() {
     level,
     latestReward,
     unlockedRewardIds,
+    isGoldenFood,
     isGameOver,
     isPaused,
     hasStarted,
@@ -211,6 +212,21 @@ export function SnakeGame() {
       </div>
 
       <AnimatePresence>
+        {isGoldenFood && (
+          <motion.div
+            role='status'
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs font-semibold text-amber-200'
+          >
+            <Gift size={14} aria-hidden='true' />
+            Comida dourada disponível: vale +3 pontos
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {latestReward && (
           <motion.div
             role='status'
@@ -299,7 +315,9 @@ export function SnakeGame() {
                     : isBody
                       ? selectedSkin.body
                       : isFood
-                        ? 'animate-pulse rounded-[2px] bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
+                        ? isGoldenFood
+                          ? 'animate-pulse rounded-[2px] bg-amber-300 shadow-[0_0_12px_rgba(252,211,77,1)]'
+                          : 'animate-pulse rounded-[2px] bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
                         : 'bg-zinc-900/40'
                 }
               />
