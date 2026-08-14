@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Gamepad2, Pause, Play, RotateCcw, Skull, Trophy, Zap } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Gamepad2, Gift, Lock, Palette, Pause, Play, RotateCcw, Skull, Trophy, Zap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnakeGame, type Direction } from '../../hooks/useSnakeGame';
 import { DPad } from './DPad';
@@ -30,6 +30,34 @@ const START_ICON_CELLS = [
 ];
 
 const SWIPE_DISTANCE = 24;
+const SELECTED_SKIN_KEY = 'meu-perfil:snake-selected-skin';
+
+const SNAKE_SKINS = [
+  {
+    id: 'green',
+    name: 'Verde',
+    rewardId: null,
+    preview: 'bg-green-400',
+    head: 'rounded-[2px] bg-green-300 shadow-[0_0_7px_rgba(134,239,172,.75)]',
+    body: 'rounded-[2px] bg-green-600/75',
+  },
+  {
+    id: 'blue',
+    name: 'Azul',
+    rewardId: 'blue-skin',
+    preview: 'bg-blue-400',
+    head: 'rounded-[2px] bg-blue-300 shadow-[0_0_7px_rgba(147,197,253,.75)]',
+    body: 'rounded-[2px] bg-blue-600/75',
+  },
+  {
+    id: 'violet',
+    name: 'Violeta',
+    rewardId: 'master',
+    preview: 'bg-violet-400',
+    head: 'rounded-[2px] bg-violet-300 shadow-[0_0_7px_rgba(196,181,253,.75)]',
+    body: 'rounded-[2px] bg-violet-600/75',
+  },
+] as const;
 
 export function SnakeGame() {
   const {
@@ -38,6 +66,8 @@ export function SnakeGame() {
     score,
     highScore,
     level,
+    latestReward,
+    unlockedRewardIds,
     isGameOver,
     isPaused,
     hasStarted,
@@ -45,10 +75,34 @@ export function SnakeGame() {
     setDirection,
     start,
     togglePause,
+    clearLatestReward,
     reset,
   } = useSnakeGame();
 
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const [selectedSkinId, setSelectedSkinId] = useState(() => {
+    const storedSkin = window.localStorage.getItem(SELECTED_SKIN_KEY);
+    return SNAKE_SKINS.some((skin) => skin.id === storedSkin) ? storedSkin : 'green';
+  });
+
+  const selectedSkin =
+    SNAKE_SKINS.find(
+      (skin) =>
+        skin.id === selectedSkinId &&
+        (skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId)),
+    ) ?? SNAKE_SKINS[0];
+
+  function selectSkin(skinId: string) {
+    setSelectedSkinId(skinId);
+    window.localStorage.setItem(SELECTED_SKIN_KEY, skinId);
+  }
+
+  useEffect(() => {
+    if (!latestReward) return;
+
+    const timeout = window.setTimeout(clearLatestReward, 4000);
+    return () => window.clearTimeout(timeout);
+  }, [clearLatestReward, latestReward]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -156,6 +210,72 @@ export function SnakeGame() {
         </div>
       </div>
 
+      <AnimatePresence>
+        {latestReward && (
+          <motion.div
+            role='status'
+            initial={{ opacity: 0, y: -12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+            className='mt-3 flex items-center gap-3 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3'
+          >
+            <motion.div
+              animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }}
+              className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-400/15 text-amber-300'
+            >
+              <Gift size={19} aria-hidden='true' />
+            </motion.div>
+            <div className='min-w-0'>
+              <strong className='block text-sm text-amber-200'>{latestReward.title}</strong>
+              <span className='block text-xs text-zinc-400'>{latestReward.description}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className='mt-3 flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2'>
+        <span className='flex items-center gap-1.5 text-[11px] text-zinc-500'>
+          <Palette size={13} aria-hidden='true' />
+          Cor
+        </span>
+        <div className='flex items-center gap-2' aria-label='Cores da cobrinha'>
+          {SNAKE_SKINS.map((skin) => {
+            const unlocked =
+              skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
+            const selected = selectedSkin.id === skin.id;
+
+            return (
+              <button
+                key={skin.id}
+                type='button'
+                disabled={!unlocked}
+                onClick={() => selectSkin(skin.id)}
+                aria-label={
+                  unlocked
+                    ? `Usar cobrinha ${skin.name}`
+                    : `Cobrinha ${skin.name} bloqueada`
+                }
+                aria-pressed={selected}
+                className={`relative flex h-8 w-8 items-center justify-center rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                  selected
+                    ? 'border-white bg-white/10'
+                    : 'border-zinc-800 bg-zinc-900'
+                } ${unlocked ? 'hover:border-zinc-600' : 'cursor-not-allowed opacity-45'}`}
+              >
+                <span className={`h-3.5 w-3.5 rounded-[2px] ${skin.preview}`} />
+                {!unlocked && (
+                  <Lock
+                    size={10}
+                    aria-hidden='true'
+                    className='absolute -right-1 -bottom-1 rounded-full bg-zinc-950 text-zinc-500'
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className='relative mt-4'>
         <div
           onTouchStart={handleTouchStart}
@@ -175,9 +295,9 @@ export function SnakeGame() {
                 key={key}
                 className={
                   isHead
-                    ? 'rounded-[2px] bg-green-300 shadow-[0_0_7px_rgba(134,239,172,.75)]'
+                    ? selectedSkin.head
                     : isBody
-                      ? 'rounded-[2px] bg-green-600/75'
+                      ? selectedSkin.body
                       : isFood
                         ? 'animate-pulse rounded-[2px] bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
                         : 'bg-zinc-900/40'
