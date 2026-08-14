@@ -1,10 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+export type RewardId = 'starter' | 'blue-skin' | 'master';
 
 export interface Position {
   x: number;
   y: number;
+}
+
+export interface SnakeReward {
+  id: RewardId;
+  score: number;
+  title: string;
+  description: string;
 }
 
 export const GRID_SIZE = 15;
@@ -14,6 +22,28 @@ const MIN_SPEED_MS = 90;
 const SPEED_STEP_MS = 8;
 const POINTS_PER_LEVEL = 3;
 const HIGH_SCORE_KEY = 'meu-perfil:snake-high-score';
+const REWARDS_KEY = 'meu-perfil:snake-rewards';
+
+const REWARDS: SnakeReward[] = [
+  {
+    id: 'starter',
+    score: 5,
+    title: 'Começando bem!',
+    description: 'Você conquistou seus primeiros 5 pontos.',
+  },
+  {
+    id: 'blue-skin',
+    score: 10,
+    title: 'Cobrinha azul desbloqueada!',
+    description: 'Uma nova cor já está disponível.',
+  },
+  {
+    id: 'master',
+    score: 20,
+    title: 'Mestre da Cobrinha!',
+    description: 'A cobrinha violeta foi desbloqueada.',
+  },
+];
 
 const OPPOSITE: Record<Direction, Direction> = {
   UP: 'DOWN',
@@ -54,11 +84,27 @@ function getStoredHighScore() {
   return Number.isFinite(storedValue) && storedValue > 0 ? storedValue : 0;
 }
 
+function getStoredRewards(): RewardId[] {
+  try {
+    const storedValue = JSON.parse(window.localStorage.getItem(REWARDS_KEY) ?? '[]');
+    if (!Array.isArray(storedValue)) return [];
+
+    return storedValue.filter((id): id is RewardId =>
+      REWARDS.some((reward) => reward.id === id),
+    );
+  } catch {
+    return [];
+  }
+}
+
 export function useSnakeGame() {
+  const storedRewards = useRef<RewardId[]>(getStoredRewards());
   const [snake, setSnake] = useState<Position[]>(getInitialSnake);
   const [food, setFood] = useState<Position>(() => randomEmptyCell(new Set(getInitialSnake().map(toKey))));
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(getStoredHighScore);
+  const [unlockedRewardIds, setUnlockedRewardIds] = useState<RewardId[]>(storedRewards.current);
+  const [latestReward, setLatestReward] = useState<SnakeReward | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
@@ -87,12 +133,17 @@ export function useSnakeGame() {
     });
   }, [hasStarted, isGameOver]);
 
+  const clearLatestReward = useCallback(() => {
+    setLatestReward(null);
+  }, []);
+
   const reset = useCallback(() => {
     const initialSnake = getInitialSnake();
 
     setSnake(initialSnake);
     setFood(randomEmptyCell(new Set(initialSnake.map(toKey))));
     setScore(0);
+    setLatestReward(null);
     setIsGameOver(false);
     setIsRunning(true);
     setHasStarted(true);
@@ -147,6 +198,19 @@ export function useSnakeGame() {
         if (ateFood) {
           setScore((currentScore) => {
             const nextScore = currentScore + 1;
+            const unlockedReward = REWARDS.find(
+              (reward) =>
+                reward.score === nextScore &&
+                !storedRewards.current.includes(reward.id),
+            );
+
+            if (unlockedReward) {
+              const nextRewards = [...storedRewards.current, unlockedReward.id];
+              storedRewards.current = nextRewards;
+              setUnlockedRewardIds(nextRewards);
+              setLatestReward(unlockedReward);
+              window.localStorage.setItem(REWARDS_KEY, JSON.stringify(nextRewards));
+            }
 
             setHighScore((currentHighScore) => {
               const nextHighScore = Math.max(currentHighScore, nextScore);
@@ -176,6 +240,8 @@ export function useSnakeGame() {
     score,
     highScore,
     level,
+    latestReward,
+    unlockedRewardIds,
     isGameOver,
     isPaused,
     hasStarted,
@@ -183,6 +249,7 @@ export function useSnakeGame() {
     setDirection,
     start,
     togglePause,
+    clearLatestReward,
     reset,
   };
 }
