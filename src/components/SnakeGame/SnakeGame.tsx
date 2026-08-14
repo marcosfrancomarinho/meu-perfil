@@ -179,7 +179,7 @@ export function SnakeGame() {
                     : isBody
                       ? 'rounded-[2px] bg-green-600/75'
                       : isFood
-                        ? 'animate-pulse rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
+                        ? 'animate-pulse rounded-[2px] bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
                         : 'bg-zinc-900/40'
                 }
               />
@@ -227,7 +227,7 @@ export function SnakeGame() {
                     y='40'
                     width='11'
                     height='11'
-                    rx='5.5'
+                    rx='2'
                     fill='#60a5fa'
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: [0, 1, 1], scale: [0, 1.3, 1] }}
