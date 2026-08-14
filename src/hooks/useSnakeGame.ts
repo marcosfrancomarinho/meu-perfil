@@ -223,7 +223,7 @@ export function useSnakeGame() {
 
             if (isGoldenFood) {
               setIsGoldenFood(false);
-            } else if (nextScore === 30) {
+            } else if (nextScore >= 30 && nextScore % 10 === 0) {
               setIsGoldenFood(true);
             }
 
