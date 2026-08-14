@@ -12,8 +12,9 @@ O projeto inclui também um **Snake Game** integrado à página, com controles p
 - Animações e partículas visuais
 - Snake Game com níveis e velocidade progressiva
 - Recorde e recompensas salvos no navegador
-- Conquistas em 5, 10 e 20 pontos
+- Conquistas em 5, 10, 20 e 30 pontos
 - Cores azul e violeta desbloqueáveis
+- Comida dourada especial valendo 3 pontos
 - Pausa manual e automática ao trocar de aba
 - Controles por teclado, D-pad e deslize
 - Layout responsivo
@@ -46,6 +47,7 @@ npm run dev
 | 5 pontos | Conquista “Começando bem” |
 | 10 pontos | Cobrinha azul |
 | 20 pontos | Conquista “Mestre da Cobrinha” e cobrinha violeta |
+| 30 pontos | Comida dourada especial valendo 3 pontos |
 
 ## 🎮 Controles do jogo
 
