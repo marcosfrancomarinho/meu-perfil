@@ -292,7 +292,7 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='relative mt-4'>
+      <div className='relative -mx-2 mt-4 sm:mx-0'>
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
