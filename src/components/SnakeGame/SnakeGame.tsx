@@ -46,6 +46,7 @@ export function SnakeGame() {
 
   return (
     <motion.section
+      aria-labelledby='game-title'
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -54,28 +55,29 @@ export function SnakeGame() {
       <div className='flex items-center justify-between gap-3'>
         <div className='flex items-center gap-2'>
           <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-500/10 text-green-400 sm:h-10 sm:w-10'>
-            <Gamepad2 size={18} className='sm:size-5' />
+            <Gamepad2 size={18} aria-hidden='true' className='sm:size-5' />
           </div>
           <div>
-            <h3 className='text-sm font-semibold sm:text-base'>Snake Game</h3>
-            <p className='text-[11px] text-zinc-500 sm:text-xs'>Só por diversão mesmo 🐍</p>
+            <h2 id='game-title' className='text-sm font-semibold sm:text-base'>Hora de jogar!</h2>
+            <p className='text-[11px] text-zinc-500 sm:text-xs'>Pegue os pontos azuis e não bata 🐍</p>
           </div>
         </div>
 
         <button
           type='button'
           onClick={reset}
-          className='flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-[11px] text-zinc-400 transition hover:border-zinc-700 hover:text-white sm:text-xs'
+          className='flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-[11px] text-zinc-400 transition hover:border-zinc-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 sm:text-xs'
         >
-          <RotateCcw size={13} />
+          <RotateCcw size={13} aria-hidden='true' />
           Reiniciar
         </button>
       </div>
 
-      <div className='mt-3 text-[11px] text-zinc-500 sm:text-xs'>Pontos: {score}</div>
+      <div aria-live='polite' className='mt-3 text-[11px] text-zinc-500 sm:text-xs'>Pontos: {score}</div>
 
       <div className='relative mt-4'>
         <div
+          aria-label='Tabuleiro do jogo da cobrinha'
           className='mx-auto grid aspect-square w-full max-w-md gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:rounded-2xl'
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
         >
@@ -111,6 +113,7 @@ export function SnakeGame() {
               className='absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl bg-zinc-950/95 px-6 text-center backdrop-blur-sm sm:rounded-2xl'
             >
               <div
+                aria-hidden='true'
                 className='pointer-events-none absolute inset-0 opacity-[0.07]'
                 style={{
                   backgroundImage:
@@ -126,12 +129,13 @@ export function SnakeGame() {
                 className='relative flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28'
               >
                 <motion.div
+                  aria-hidden='true'
                   animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.12, 1] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
                   className='absolute inset-0 rounded-full bg-green-500/25 blur-2xl'
                 />
 
-                <svg viewBox='0 0 100 100' className='relative h-16 w-16 sm:h-20 sm:w-20' fill='none'>
+                <svg aria-hidden='true' viewBox='0 0 100 100' className='relative h-16 w-16 sm:h-20 sm:w-20' fill='none'>
                   {START_ICON_CELLS.map((cell, index) => (
                     <motion.rect
                       key={`${cell.x}-${cell.y}`}
@@ -146,7 +150,6 @@ export function SnakeGame() {
                       transition={{ delay: cell.delay, type: 'spring', stiffness: 260 }}
                     />
                   ))}
-
                   <motion.rect
                     x='75'
                     y='40'
@@ -163,9 +166,9 @@ export function SnakeGame() {
               </motion.div>
 
               <div className='relative space-y-1.5'>
-                <p className='text-base font-semibold sm:text-lg'>Pronto para jogar?</p>
-                <p className='max-w-[240px] text-xs text-zinc-400 sm:text-sm'>
-                  Use as setas do teclado (ou o D-pad no celular) para guiar a cobrinha
+                <p className='text-base font-semibold sm:text-lg'>Vamos jogar?</p>
+                <p className='max-w-[250px] text-xs text-zinc-400 sm:text-sm'>
+                  Use as setas do teclado ou os botões na tela para guiar a cobrinha.
                 </p>
               </div>
 
@@ -174,9 +177,9 @@ export function SnakeGame() {
                 onClick={start}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                className='relative mt-1 flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_25px_rgba(74,222,128,.4)] transition sm:text-base'
+                className='relative mt-1 flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_25px_rgba(74,222,128,.4)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:text-base'
               >
-                <Gamepad2 size={16} />
+                <Gamepad2 size={16} aria-hidden='true' />
                 Começar
               </motion.button>
             </motion.div>
@@ -195,16 +198,16 @@ export function SnakeGame() {
                 transition={{ type: 'spring', stiffness: 200 }}
                 className='flex h-14 w-14 items-center justify-center rounded-full bg-red-500/15 text-red-400'
               >
-                <Skull size={26} />
+                <Skull size={26} aria-hidden='true' />
               </motion.div>
-              <p className='text-sm font-semibold sm:text-base'>Game over 💀</p>
-              <p className='text-xs text-zinc-400 sm:text-sm'>Pontuação final: {score}</p>
+              <p className='text-sm font-semibold sm:text-base'>Fim de jogo 💀</p>
+              <p className='text-xs text-zinc-400 sm:text-sm'>Você fez {score} ponto{score === 1 ? '' : 's'}.</p>
               <button
                 type='button'
                 onClick={reset}
-                className='mt-1 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs text-green-300 transition hover:bg-green-500/20 sm:text-sm'
+                className='mt-1 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs text-green-300 transition hover:bg-green-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 sm:text-sm'
               >
-                Jogar de novo
+                Jogar novamente
               </button>
             </motion.div>
           )}
