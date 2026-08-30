@@ -27,7 +27,7 @@ export const links: LinkItem[] = [
   {
     title: 'Spotify',
     description: 'As melhores músicas catalogadas',
-    href: 'https://open.spotify.com/playlist/47f2vCrvOn7hSKpaMMz2vw?si=SBx9yelwR4uBvJHSt5gq-g&utm_source=whatsapp&pi=UQBnD7GuQ7SIc',
+    href: 'https://open.spotify.com/playlist/3MhDg6msfOLdVDUKSRFhF2?si=PE92nN01TP-2UM_VjXZB8g&utm_source=copy-link&pi=r4b7_-R-TGWMY',
     icon: FaSpotify,
     color: 'green',
   },
