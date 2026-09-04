@@ -1,13 +1,10 @@
 export const techs: string[] = [
   'TypeScript',
-  'Golang',
-  'Python',
-  'Node',
-  'Spring Boot',
-  'NestJS',
+  'Go',
+  'Java',
   'React',
-  'DDD',
   'Clean Architecture',
+  'Hexagonal',
   'SOLID',
   'Design Patterns',
 ];
