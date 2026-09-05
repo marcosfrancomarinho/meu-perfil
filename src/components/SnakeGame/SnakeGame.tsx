@@ -53,19 +53,19 @@ const POWER_UP_INFO: Record<
   { label: string; description: string; cellClass: string }
 > = {
   debug: {
-    label: '🐞 Debug',
+    label: '⏱️ Câmera lenta',
     description: 'reduz a velocidade por 7 segundos',
     cellClass:
       'animate-pulse rounded-[2px] bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,.95)]',
   },
   'double-xp': {
-    label: '2× XP',
+    label: '2× Pontos',
     description: 'dobra os pontos por 7 segundos',
     cellClass:
       'animate-pulse rounded-[2px] bg-fuchsia-400 shadow-[0_0_12px_rgba(232,121,249,.95)]',
   },
   ghost: {
-    label: '👻 No-clip',
+    label: '👻 Fantasma',
     description: 'atravessa o corpo e obstáculos por 7 segundos',
     cellClass:
       'animate-pulse rounded-[2px] bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,.95)]',
@@ -99,6 +99,14 @@ const SNAKE_SKINS = [
   },
 ] as const;
 
+function getLevelName(level: number) {
+  if (level <= 1) return 'Iniciante';
+  if (level === 2) return 'Ágil';
+  if (level === 3) return 'Veterano';
+  if (level === 4) return 'Mestre';
+  return 'Lenda';
+}
+
 export function SnakeGame() {
   const {
     snake,
@@ -111,7 +119,6 @@ export function SnakeGame() {
     maxCombo,
     highScore,
     level,
-    levelTitle,
     latestReward,
     unlockedRewardIds,
     isGoldenFood,
@@ -143,6 +150,7 @@ export function SnakeGame() {
   const activePowerUpInfo = activePowerUp
     ? POWER_UP_INFO[activePowerUp.type]
     : null;
+  const levelName = getLevelName(level);
 
   function selectSkin(skinId: string) {
     setSelectedSkinId(skinId);
@@ -221,7 +229,7 @@ export function SnakeGame() {
             <Gamepad2 size={18} aria-hidden='true' className='sm:size-5' />
           </div>
           <div>
-            <h3 className='text-sm font-semibold sm:text-base'>Dev Snake</h3>
+            <h3 className='text-sm font-semibold sm:text-base'>Snake Game</h3>
             <p className='text-[11px] text-zinc-500 sm:text-xs'>
               Faça combos, pegue power-ups e sobreviva 🐍
             </p>
@@ -267,7 +275,7 @@ export function SnakeGame() {
             <Zap size={10} aria-hidden='true' /> Nível
           </span>
           <strong className='block text-sm text-blue-400'>{level}</strong>
-          <span className='block text-[9px] text-zinc-600'>{levelTitle}</span>
+          <span className='block text-[9px] text-zinc-600'>{levelName}</span>
         </div>
         <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
           <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
@@ -400,7 +408,7 @@ export function SnakeGame() {
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          aria-label='Tabuleiro do Dev Snake. No celular, deslize para mudar a direção.'
+          aria-label='Tabuleiro do Snake Game. No celular, deslize para mudar a direção.'
           className='mx-auto grid aspect-square w-full max-w-md touch-none gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:rounded-2xl'
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
         >
@@ -486,9 +494,9 @@ export function SnakeGame() {
               </motion.div>
 
               <div className='relative space-y-1.5'>
-                <p className='text-base font-semibold sm:text-lg'>Pronto para o Dev Snake?</p>
+                <p className='text-base font-semibold sm:text-lg'>Pronto para jogar?</p>
                 <p className='max-w-[280px] text-xs text-zinc-400 sm:text-sm'>
-                  Faça combos rápidos, colete power-ups e cuidado com os obstáculos a partir do nível Sênior.
+                  Faça combos rápidos, colete power-ups e cuidado com os obstáculos a partir do nível 3.
                 </p>
               </div>
 
@@ -542,7 +550,7 @@ export function SnakeGame() {
               </motion.div>
               <p className='text-sm font-semibold sm:text-base'>Game over 💀</p>
               <p className='text-xs text-zinc-400 sm:text-sm'>
-                Você fez {score} ponto{score === 1 ? '' : 's'} e chegou ao nível {level} · {levelTitle}.
+                Você fez {score} ponto{score === 1 ? '' : 's'} e chegou ao nível {level} · {levelName}.
               </p>
               {score > 0 && score === highScore && (
                 <p className='text-xs font-semibold text-amber-400'>Novo recorde! 🏆</p>
@@ -564,7 +572,7 @@ export function SnakeGame() {
       </div>
 
       <div className='mt-4 rounded-xl border border-zinc-800/70 bg-zinc-950/30 px-3 py-2 text-center text-[10px] text-zinc-600 sm:text-[11px]'>
-        🐞 Debug = lento • 2× XP = pontos em dobro • 👻 No-clip = atravessa corpo/obstáculos
+        ⏱️ Câmera lenta = reduz a velocidade • 2× Pontos = pontos em dobro • 👻 Fantasma = atravessa corpo/obstáculos
       </div>
 
       <p className='mt-3 text-center text-[11px] text-zinc-600'>
