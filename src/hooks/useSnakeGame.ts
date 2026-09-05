@@ -393,6 +393,8 @@ export function useSnakeGame() {
             ...nextSnake.map(toKey),
             ...obstacles.map(toKey),
           ]);
+          if (powerUp) occupied.add(toKey(powerUp.position));
+
           const nextFood = randomEmptyCell(occupied);
           setFood(nextFood);
           occupied.add(toKey(nextFood));
