@@ -1,7 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
-import { Gamepad2, Gift, Lock, Palette, Pause, Play, RotateCcw, Skull, Trophy, Zap } from 'lucide-react';
+import {
+  Gamepad2,
+  Gift,
+  Lock,
+  Palette,
+  Pause,
+  Play,
+  RotateCcw,
+  Skull,
+  Sparkles,
+  Trophy,
+  Zap,
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSnakeGame, type Direction } from '../../hooks/useSnakeGame';
+import {
+  useSnakeGame,
+  type Direction,
+  type PowerUpType,
+} from '../../hooks/useSnakeGame';
 import { DPad } from './DPad';
 
 const KEY_MAP: Record<string, Direction> = {
@@ -31,6 +47,30 @@ const START_ICON_CELLS = [
 
 const SWIPE_DISTANCE = 24;
 const SELECTED_SKIN_KEY = 'meu-perfil:snake-selected-skin';
+
+const POWER_UP_INFO: Record<
+  PowerUpType,
+  { label: string; description: string; cellClass: string }
+> = {
+  debug: {
+    label: '🐞 Debug',
+    description: 'reduz a velocidade por 7 segundos',
+    cellClass:
+      'animate-pulse rounded-[2px] bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,.95)]',
+  },
+  'double-xp': {
+    label: '2× XP',
+    description: 'dobra os pontos por 7 segundos',
+    cellClass:
+      'animate-pulse rounded-[2px] bg-fuchsia-400 shadow-[0_0_12px_rgba(232,121,249,.95)]',
+  },
+  ghost: {
+    label: '👻 No-clip',
+    description: 'atravessa o corpo e obstáculos por 7 segundos',
+    cellClass:
+      'animate-pulse rounded-[2px] bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,.95)]',
+  },
+};
 
 const SNAKE_SKINS = [
   {
@@ -63,9 +103,15 @@ export function SnakeGame() {
   const {
     snake,
     food,
+    obstacles,
+    powerUp,
+    activePowerUp,
     score,
+    combo,
+    maxCombo,
     highScore,
     level,
+    levelTitle,
     latestReward,
     unlockedRewardIds,
     isGoldenFood,
@@ -93,6 +139,11 @@ export function SnakeGame() {
         (skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId)),
     ) ?? SNAKE_SKINS[0];
 
+  const availablePowerUp = powerUp ? POWER_UP_INFO[powerUp.type] : null;
+  const activePowerUpInfo = activePowerUp
+    ? POWER_UP_INFO[activePowerUp.type]
+    : null;
+
   function selectSkin(skinId: string) {
     setSelectedSkinId(skinId);
     window.localStorage.setItem(SELECTED_SKIN_KEY, skinId);
@@ -107,7 +158,9 @@ export function SnakeGame() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === ' ' && hasStarted && !isGameOver) {
+      const isPauseKey = event.key === ' ' || event.key.toLowerCase() === 'p';
+
+      if (isPauseKey && hasStarted && !isGameOver) {
         event.preventDefault();
         togglePause();
         return;
@@ -148,8 +201,12 @@ export function SnakeGame() {
   }
 
   const snakeCells = new Set(snake.map((segment) => `${segment.x},${segment.y}`));
+  const obstacleCells = new Set(
+    obstacles.map((obstacle) => `${obstacle.x},${obstacle.y}`),
+  );
   const headKey = `${snake[0].x},${snake[0].y}`;
   const foodKey = `${food.x},${food.y}`;
+  const powerUpKey = powerUp ? `${powerUp.position.x},${powerUp.position.y}` : null;
 
   return (
     <motion.section
@@ -164,8 +221,10 @@ export function SnakeGame() {
             <Gamepad2 size={18} aria-hidden='true' className='sm:size-5' />
           </div>
           <div>
-            <h3 className='text-sm font-semibold sm:text-base'>Snake Game</h3>
-            <p className='text-[11px] text-zinc-500 sm:text-xs'>Pegue os pontos azuis e não bata 🐍</p>
+            <h3 className='text-sm font-semibold sm:text-base'>Dev Snake</h3>
+            <p className='text-[11px] text-zinc-500 sm:text-xs'>
+              Faça combos, pegue power-ups e sobreviva 🐍
+            </p>
           </div>
         </div>
 
@@ -192,7 +251,7 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='mt-4 grid grid-cols-3 gap-2' aria-label='Estatísticas do jogo'>
+      <div className='mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4' aria-label='Estatísticas do jogo'>
         <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
           <span className='block text-[10px] uppercase tracking-wide text-zinc-600'>Pontos</span>
           <strong aria-live='polite' className='text-sm text-green-400'>{score}</strong>
@@ -207,7 +266,20 @@ export function SnakeGame() {
           <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
             <Zap size={10} aria-hidden='true' /> Nível
           </span>
-          <strong className='text-sm text-blue-400'>{level}</strong>
+          <strong className='block text-sm text-blue-400'>{level}</strong>
+          <span className='block text-[9px] text-zinc-600'>{levelTitle}</span>
+        </div>
+        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
+          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
+            <Sparkles size={10} aria-hidden='true' /> Combo
+          </span>
+          <strong
+            aria-live='polite'
+            className={`text-sm ${combo > 1 ? 'text-fuchsia-400' : 'text-zinc-500'}`}
+          >
+            ×{combo}
+          </strong>
+          <span className='block text-[9px] text-zinc-600'>máx. ×{maxCombo}</span>
         </div>
       </div>
 
@@ -221,7 +293,39 @@ export function SnakeGame() {
             className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs font-semibold text-amber-200'
           >
             <Gift size={14} aria-hidden='true' />
-            Comida dourada disponível: vale +3 pontos
+            Comida dourada disponível: base de +3 pontos antes do combo
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {availablePowerUp && (
+          <motion.div
+            role='status'
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs text-cyan-100'
+          >
+            <Sparkles size={14} aria-hidden='true' />
+            <span>
+              Power-up disponível: <strong>{availablePowerUp.label}</strong> — {availablePowerUp.description}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {activePowerUpInfo && (
+          <motion.div
+            role='status'
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-fuchsia-300/20 bg-fuchsia-300/10 px-4 py-2 text-xs font-semibold text-fuchsia-100'
+          >
+            <Zap size={14} aria-hidden='true' />
+            {activePowerUpInfo.label} ativo
           </motion.div>
         )}
       </AnimatePresence>
@@ -296,7 +400,7 @@ export function SnakeGame() {
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          aria-label='Tabuleiro do jogo da cobrinha. No celular, deslize para mudar a direção.'
+          aria-label='Tabuleiro do Dev Snake. No celular, deslize para mudar a direção.'
           className='mx-auto grid aspect-square w-full max-w-md touch-none gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:rounded-2xl'
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
         >
@@ -305,6 +409,8 @@ export function SnakeGame() {
             const isHead = key === headKey;
             const isBody = !isHead && snakeCells.has(key);
             const isFood = key === foodKey;
+            const isPowerUp = key === powerUpKey;
+            const isObstacle = obstacleCells.has(key);
 
             return (
               <div
@@ -318,7 +424,11 @@ export function SnakeGame() {
                         ? isGoldenFood
                           ? 'animate-pulse rounded-[2px] bg-amber-300 shadow-[0_0_12px_rgba(252,211,77,1)]'
                           : 'animate-pulse rounded-[2px] bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1)]'
-                        : 'bg-zinc-900/40'
+                        : isPowerUp && availablePowerUp
+                          ? availablePowerUp.cellClass
+                          : isObstacle
+                            ? 'rounded-[2px] bg-zinc-600 shadow-[inset_0_0_0_1px_rgba(255,255,255,.08)]'
+                            : 'bg-zinc-900/40'
                 }
               />
             );
@@ -376,9 +486,9 @@ export function SnakeGame() {
               </motion.div>
 
               <div className='relative space-y-1.5'>
-                <p className='text-base font-semibold sm:text-lg'>Pronto para jogar?</p>
-                <p className='max-w-[250px] text-xs text-zinc-400 sm:text-sm'>
-                  Use o teclado, os botões ou deslize no tabuleiro pelo celular.
+                <p className='text-base font-semibold sm:text-lg'>Pronto para o Dev Snake?</p>
+                <p className='max-w-[280px] text-xs text-zinc-400 sm:text-sm'>
+                  Faça combos rápidos, colete power-ups e cuidado com os obstáculos a partir do nível Sênior.
                 </p>
               </div>
 
@@ -432,7 +542,7 @@ export function SnakeGame() {
               </motion.div>
               <p className='text-sm font-semibold sm:text-base'>Game over 💀</p>
               <p className='text-xs text-zinc-400 sm:text-sm'>
-                Você fez {score} ponto{score === 1 ? '' : 's'}.
+                Você fez {score} ponto{score === 1 ? '' : 's'} e chegou ao nível {level} · {levelTitle}.
               </p>
               {score > 0 && score === highScore && (
                 <p className='text-xs font-semibold text-amber-400'>Novo recorde! 🏆</p>
@@ -453,9 +563,13 @@ export function SnakeGame() {
         <DPad onPress={setDirection} />
       </div>
 
-      <p className='mt-4 text-center text-[11px] text-zinc-600'>
+      <div className='mt-4 rounded-xl border border-zinc-800/70 bg-zinc-950/30 px-3 py-2 text-center text-[10px] text-zinc-600 sm:text-[11px]'>
+        🐞 Debug = lento • 2× XP = pontos em dobro • 👻 No-clip = atravessa corpo/obstáculos
+      </div>
+
+      <p className='mt-3 text-center text-[11px] text-zinc-600'>
         <span className='sm:hidden'>Use os botões ou deslize no tabuleiro</span>
-        <span className='hidden sm:inline'>Setas ou W A S D para mover • Espaço para pausar</span>
+        <span className='hidden sm:inline'>Setas ou W A S D para mover • Espaço ou P para pausar</span>
       </p>
     </motion.section>
   );
