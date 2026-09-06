@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
-export type RewardId = 'starter' | 'blue-skin' | 'master' | 'golden-food';
+export type RewardId =
+  | 'starter'
+  | 'blue-skin'
+  | 'violet-skin'
+  | 'amber-skin'
+  | 'red-skin'
+  | 'cyan-skin'
+  | 'pink-skin'
+  | 'gold-skin'
+  | 'golden-food';
 export type PowerUpType = 'debug' | 'double-xp' | 'ghost';
 
 export interface Position {
@@ -40,7 +49,7 @@ const OBSTACLE_START_LEVEL = 3;
 const OBSTACLES_PER_LEVEL = 2;
 const MAX_OBSTACLES = 12;
 const HIGH_SCORE_KEY = 'meu-perfil:snake-high-score';
-const REWARDS_KEY = 'meu-perfil:snake-rewards';
+const REWARDS_KEY = 'meu-perfil:snake-rewards-v2';
 
 const REWARDS: SnakeReward[] = [
   {
@@ -51,15 +60,45 @@ const REWARDS: SnakeReward[] = [
   },
   {
     id: 'blue-skin',
-    score: 10,
+    score: 40,
     title: 'Cobrinha azul desbloqueada!',
-    description: 'Uma nova cor já está disponível.',
+    description: 'Você alcançou o nível 5. Uma nova cor está disponível!',
   },
   {
-    id: 'master',
-    score: 20,
-    title: 'Mestre da Cobrinha!',
-    description: 'A cobrinha violeta foi desbloqueada.',
+    id: 'violet-skin',
+    score: 90,
+    title: 'Cobrinha violeta desbloqueada!',
+    description: 'Recompensa por alcançar o nível 10.',
+  },
+  {
+    id: 'amber-skin',
+    score: 140,
+    title: 'Cobrinha âmbar desbloqueada!',
+    description: 'Recompensa por alcançar o nível 15.',
+  },
+  {
+    id: 'red-skin',
+    score: 190,
+    title: 'Cobrinha vermelha desbloqueada!',
+    description: 'Recompensa por alcançar o nível 20.',
+  },
+  {
+    id: 'cyan-skin',
+    score: 240,
+    title: 'Cobrinha ciano desbloqueada!',
+    description: 'Recompensa por alcançar o nível 25.',
+  },
+  {
+    id: 'pink-skin',
+    score: 290,
+    title: 'Cobrinha rosa desbloqueada!',
+    description: 'Recompensa por alcançar o nível 30.',
+  },
+  {
+    id: 'gold-skin',
+    score: 390,
+    title: 'Cobrinha dourada desbloqueada!',
+    description: 'A recompensa lendária do nível 40 é sua!',
   },
   {
     id: 'golden-food',
@@ -128,11 +167,14 @@ function getStoredRewards(): RewardId[] {
 }
 
 function getLevelTitle(level: number) {
-  if (level <= 1) return 'Júnior';
-  if (level === 2) return 'Pleno';
-  if (level === 3) return 'Sênior';
-  if (level === 4) return 'Staff';
-  return 'Arquiteto';
+  if (level < 5) return 'Iniciante';
+  if (level < 10) return 'Ágil';
+  if (level < 15) return 'Veterano';
+  if (level < 20) return 'Elite';
+  if (level < 25) return 'Mestre';
+  if (level < 30) return 'Campeão';
+  if (level < 40) return 'Mito';
+  return 'Lenda';
 }
 
 export function useSnakeGame() {
