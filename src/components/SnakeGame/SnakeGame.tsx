@@ -77,6 +77,7 @@ const SNAKE_SKINS = [
     id: 'green',
     name: 'Verde',
     rewardId: null,
+    unlockLevel: 1,
     preview: 'bg-green-400',
     head: 'rounded-[2px] bg-green-300 shadow-[0_0_7px_rgba(134,239,172,.75)]',
     body: 'rounded-[2px] bg-green-600/75',
@@ -85,6 +86,7 @@ const SNAKE_SKINS = [
     id: 'blue',
     name: 'Azul',
     rewardId: 'blue-skin',
+    unlockLevel: 5,
     preview: 'bg-blue-400',
     head: 'rounded-[2px] bg-blue-300 shadow-[0_0_7px_rgba(147,197,253,.75)]',
     body: 'rounded-[2px] bg-blue-600/75',
@@ -92,18 +94,67 @@ const SNAKE_SKINS = [
   {
     id: 'violet',
     name: 'Violeta',
-    rewardId: 'master',
+    rewardId: 'violet-skin',
+    unlockLevel: 10,
     preview: 'bg-violet-400',
     head: 'rounded-[2px] bg-violet-300 shadow-[0_0_7px_rgba(196,181,253,.75)]',
     body: 'rounded-[2px] bg-violet-600/75',
   },
+  {
+    id: 'amber',
+    name: 'Âmbar',
+    rewardId: 'amber-skin',
+    unlockLevel: 15,
+    preview: 'bg-amber-400',
+    head: 'rounded-[2px] bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,.85)]',
+    body: 'rounded-[2px] bg-amber-600/80',
+  },
+  {
+    id: 'red',
+    name: 'Vermelha',
+    rewardId: 'red-skin',
+    unlockLevel: 20,
+    preview: 'bg-red-400',
+    head: 'rounded-[2px] bg-red-300 shadow-[0_0_8px_rgba(252,165,165,.85)]',
+    body: 'rounded-[2px] bg-red-600/80',
+  },
+  {
+    id: 'cyan',
+    name: 'Ciano',
+    rewardId: 'cyan-skin',
+    unlockLevel: 25,
+    preview: 'bg-cyan-400',
+    head: 'rounded-[2px] bg-cyan-200 shadow-[0_0_9px_rgba(103,232,249,.9)]',
+    body: 'rounded-[2px] bg-cyan-600/80',
+  },
+  {
+    id: 'pink',
+    name: 'Rosa',
+    rewardId: 'pink-skin',
+    unlockLevel: 30,
+    preview: 'bg-pink-400',
+    head: 'rounded-[2px] bg-pink-300 shadow-[0_0_9px_rgba(249,168,212,.9)]',
+    body: 'rounded-[2px] bg-pink-600/80',
+  },
+  {
+    id: 'gold',
+    name: 'Dourada',
+    rewardId: 'gold-skin',
+    unlockLevel: 40,
+    preview: 'bg-yellow-300',
+    head: 'rounded-[2px] bg-yellow-200 shadow-[0_0_12px_rgba(253,224,71,1)]',
+    body: 'rounded-[2px] bg-yellow-500/85 shadow-[0_0_4px_rgba(234,179,8,.6)]',
+  },
 ] as const;
 
 function getLevelName(level: number) {
-  if (level <= 1) return 'Iniciante';
-  if (level === 2) return 'Ágil';
-  if (level === 3) return 'Veterano';
-  if (level === 4) return 'Mestre';
+  if (level < 5) return 'Iniciante';
+  if (level < 10) return 'Ágil';
+  if (level < 15) return 'Veterano';
+  if (level < 20) return 'Elite';
+  if (level < 25) return 'Mestre';
+  if (level < 30) return 'Campeão';
+  if (level < 40) return 'Mito';
   return 'Lenda';
 }
 
@@ -151,6 +202,9 @@ export function SnakeGame() {
     ? POWER_UP_INFO[activePowerUp.type]
     : null;
   const levelName = getLevelName(level);
+  const nextLockedSkin = SNAKE_SKINS.find(
+    (skin) => skin.rewardId !== null && !unlockedRewardIds.includes(skin.rewardId),
+  );
 
   function selectSkin(skinId: string) {
     setSelectedSkinId(skinId);
@@ -291,82 +345,14 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isGoldenFood && (
-          <motion.div
-            role='status'
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs font-semibold text-amber-200'
-          >
-            <Gift size={14} aria-hidden='true' />
-            Comida dourada disponível: base de +3 pontos antes do combo
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {availablePowerUp && (
-          <motion.div
-            role='status'
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs text-cyan-100'
-          >
-            <Sparkles size={14} aria-hidden='true' />
-            <span>
-              Power-up disponível: <strong>{availablePowerUp.label}</strong> — {availablePowerUp.description}
-            </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {activePowerUpInfo && (
-          <motion.div
-            role='status'
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            className='mt-3 flex items-center justify-center gap-2 rounded-xl border border-fuchsia-300/20 bg-fuchsia-300/10 px-4 py-2 text-xs font-semibold text-fuchsia-100'
-          >
-            <Zap size={14} aria-hidden='true' />
-            {activePowerUpInfo.label} ativo
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {latestReward && (
-          <motion.div
-            role='status'
-            initial={{ opacity: 0, y: -12, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.96 }}
-            className='mt-3 flex items-center gap-3 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3'
-          >
-            <motion.div
-              animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }}
-              className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-400/15 text-amber-300'
-            >
-              <Gift size={19} aria-hidden='true' />
-            </motion.div>
-            <div className='min-w-0'>
-              <strong className='block text-sm text-amber-200'>{latestReward.title}</strong>
-              <span className='block text-xs text-zinc-400'>{latestReward.description}</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className='mt-3 flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2'>
+      <div className='mt-3 flex flex-col gap-2 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3'>
         <span className='flex items-center gap-1.5 text-[11px] text-zinc-500'>
           <Palette size={13} aria-hidden='true' />
-          Cor
+          {nextLockedSkin
+            ? `Próxima cor: ${nextLockedSkin.name} no nível ${nextLockedSkin.unlockLevel}`
+            : 'Todas as cores desbloqueadas'}
         </span>
-        <div className='flex items-center gap-2' aria-label='Cores da cobrinha'>
+        <div className='flex flex-wrap items-center gap-2' aria-label='Cores da cobrinha'>
           {SNAKE_SKINS.map((skin) => {
             const unlocked =
               skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
@@ -381,8 +367,9 @@ export function SnakeGame() {
                 aria-label={
                   unlocked
                     ? `Usar cobrinha ${skin.name}`
-                    : `Cobrinha ${skin.name} bloqueada`
+                    : `Cobrinha ${skin.name} bloqueada até o nível ${skin.unlockLevel}`
                 }
+                title={unlocked ? skin.name : `${skin.name}: nível ${skin.unlockLevel}`}
                 aria-pressed={selected}
                 className={`relative flex h-8 w-8 items-center justify-center rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
                   selected
@@ -405,6 +392,74 @@ export function SnakeGame() {
       </div>
 
       <div className='relative -mx-2 mt-4 sm:mx-0'>
+        <div
+          aria-live='polite'
+          className='pointer-events-none absolute inset-x-2 top-2 z-20 flex flex-col items-center gap-1.5 sm:inset-x-3 sm:top-3'
+        >
+          <AnimatePresence mode='popLayout'>
+            {latestReward && (
+              <motion.div
+                key={`reward-${latestReward.id}`}
+                role='status'
+                initial={{ opacity: 0, y: -12, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                className='flex w-full max-w-sm items-center gap-2 rounded-xl border border-amber-300/50 bg-zinc-950/95 px-3 py-2 text-left shadow-2xl backdrop-blur-md'
+              >
+                <motion.div
+                  animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }}
+                  className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400/20 text-amber-300'
+                >
+                  <Gift size={17} aria-hidden='true' />
+                </motion.div>
+                <div className='min-w-0'>
+                  <strong className='block text-xs text-amber-200 sm:text-sm'>{latestReward.title}</strong>
+                  <span className='block text-[10px] text-zinc-300 sm:text-xs'>{latestReward.description}</span>
+                </div>
+              </motion.div>
+            )}
+
+            {isGoldenFood && (
+              <motion.div
+                key='golden-food'
+                role='status'
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className='rounded-full border border-amber-300/50 bg-zinc-950/95 px-3 py-1.5 text-[10px] font-semibold text-amber-200 shadow-xl backdrop-blur-md sm:text-xs'
+              >
+                🍎 Comida dourada: +3 pontos base
+              </motion.div>
+            )}
+
+            {availablePowerUp && (
+              <motion.div
+                key={`available-${powerUp?.type}`}
+                role='status'
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className='rounded-full border border-cyan-300/40 bg-zinc-950/95 px-3 py-1.5 text-[10px] text-cyan-100 shadow-xl backdrop-blur-md sm:text-xs'
+              >
+                <strong>{availablePowerUp.label}</strong> disponível — pegue no tabuleiro
+              </motion.div>
+            )}
+
+            {activePowerUpInfo && (
+              <motion.div
+                key={`active-${activePowerUp?.type}`}
+                role='status'
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                className='rounded-full border border-fuchsia-300/40 bg-zinc-950/95 px-3 py-1.5 text-[10px] font-semibold text-fuchsia-100 shadow-xl backdrop-blur-md sm:text-xs'
+              >
+                ⚡ {activePowerUpInfo.label} ativo
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
