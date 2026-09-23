@@ -275,9 +275,9 @@ export function SnakeGame() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      className='relative mt-6 w-full scroll-mt-2 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 p-3 backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-6'
+      className='relative mt-6 w-full scroll-mt-2 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-zinc-900 to-zinc-950 p-3 backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-6'
     >
-      <div className='flex items-center justify-between gap-3'>
+      <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
           <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-500/10 text-green-400 sm:h-10 sm:w-10'>
             <Gamepad2 size={18} aria-hidden='true' className='sm:size-5' />
@@ -308,31 +308,31 @@ export function SnakeGame() {
             className='flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-[11px] text-zinc-400 transition hover:border-zinc-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 sm:text-xs'
           >
             <RotateCcw size={13} aria-hidden='true' />
-            Reiniciar
+            <span className='sr-only sm:not-sr-only'>Reiniciar</span>
           </button>
         </div>
       </div>
 
-      <div className='mt-2 grid grid-cols-4 gap-1 sm:mt-4 sm:gap-2' aria-label='Estatísticas do jogo'>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
-          <span className='block text-[10px] uppercase tracking-wide text-zinc-600'>Pontos</span>
-          <strong aria-live='polite' className='text-sm text-green-400'>{score}</strong>
+      <div className='mt-3 grid grid-cols-4 divide-x divide-white/10 rounded-xl bg-black/20 py-2 sm:mt-4' aria-label='Estatísticas do jogo'>
+        <div className='min-w-0 px-1 text-center sm:px-2'>
+          <span className='block text-[10px] uppercase tracking-wide text-zinc-400'>Pontos</span>
+          <strong aria-live='polite' className='text-base tabular-nums text-emerald-300'>{score}</strong>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
-          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
+        <div className='min-w-0 px-1 text-center sm:px-2'>
+          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-400'>
             <Trophy size={10} aria-hidden='true' /> Recorde
           </span>
-          <strong className='text-sm text-amber-400'>{highScore}</strong>
+          <strong className='text-base tabular-nums text-amber-300'>{highScore}</strong>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
-          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
+        <div className='min-w-0 px-1 text-center sm:px-2'>
+          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-400'>
             <Zap size={10} aria-hidden='true' /> Nível
           </span>
-          <strong className='block text-sm text-blue-400'>{level}</strong>
+          <strong className='block text-base tabular-nums text-sky-300'>{level}</strong>
           <span className='hidden text-[9px] text-zinc-600 sm:block'>{levelName}</span>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
-          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
+        <div className='min-w-0 px-1 text-center sm:px-2'>
+          <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-400'>
             <Sparkles size={10} aria-hidden='true' /> Combo
           </span>
           <strong
@@ -345,42 +345,56 @@ export function SnakeGame() {
         </div>
       </div>
 
-      {/* Reserve space for notices so the board and controls never move mid-game. */}
-      <div
-        role='status'
-        aria-live='polite'
-        aria-atomic='true'
-        aria-label='Avisos do jogo'
-        className='pointer-events-none mt-2 grid h-12 grid-cols-2 grid-rows-2 gap-x-2 gap-y-1 sm:mt-3 sm:h-24 sm:grid-cols-1 sm:grid-rows-4 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/40 px-2 py-1 text-[10px] sm:px-3 sm:py-2 sm:text-xs'
-      >
-        <div className='flex min-w-0 items-center gap-1.5 text-amber-200'>
+      {/* Full-width messages and compact badges keep the playing area stable. */}
+      <div className='mt-2 h-20 min-w-0 sm:mt-3'>
+        <div
+          role='status'
+          aria-live='polite'
+          aria-atomic='true'
+          aria-label='Conquistas do jogo'
+          className='flex h-11 min-w-0 items-center gap-2 px-1 text-xs leading-4'
+        >
           {latestReward ? (
             <>
-              <Gift size={13} aria-hidden='true' className='shrink-0' />
-              <span
-                className='truncate'
-                title={`${latestReward.title} ${latestReward.description}`}
-              >
+              <span className='flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-400/10 text-amber-300'>
+                <Gift size={15} aria-hidden='true' />
+              </span>
+              <span className='min-w-0 break-words font-medium text-amber-200'>
                 {latestReward.title}
                 <span className='sr-only'> {latestReward.description}</span>
               </span>
             </>
           ) : (
-            <span className='text-zinc-500'>Bônus e conquistas aparecem aqui</span>
+            <span className='flex items-center gap-2 text-zinc-400'>
+              <span className='h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400/70' />
+              {!hasStarted ? 'Uma pausa para jogar.' : isGameOver ? 'Mais uma tentativa?' : isPaused ? 'No seu ritmo. Continue quando quiser.' : 'Colete, faça combos e supere seu recorde.'}
+            </span>
           )}
         </div>
-        <div className='min-w-0 truncate font-semibold text-fuchsia-200'>
-          {activePowerUpInfo && `⚡ ${activePowerUpInfo.label} ativo`}
-        </div>
-        <div className='min-w-0 truncate text-cyan-200'>
-          {availablePowerUp && `${availablePowerUp.label} disponível no tabuleiro`}
-        </div>
-        <div className='min-w-0 truncate text-amber-200'>
-          {isGoldenFood && '🍎 Comida dourada: +3 pontos base'}
+        <div
+          role='status'
+          aria-live='polite'
+          aria-label='Bônus do jogo'
+          className='flex h-9 min-w-0 items-center gap-1.5 text-[10px] font-medium sm:text-xs'
+        >
+          <span className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1 py-1.5 ${activePowerUpInfo ? 'bg-fuchsia-400/10 text-fuchsia-200' : 'bg-white/[.03] text-zinc-500'}`}>
+            <Zap size={11} aria-hidden='true' className='shrink-0' />
+            <span>{activePowerUpInfo ? activePowerUpInfo.label.replace('⏱️ ', '').replace('👻 ', '') : 'Sem efeito'}</span>
+            <span className='sr-only'>{activePowerUpInfo ? ' ativo' : ''}</span>
+          </span>
+          <span className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1 py-1.5 ${availablePowerUp ? 'bg-cyan-400/10 text-cyan-200' : 'bg-white/[.03] text-zinc-500'}`}>
+            <Gift size={11} aria-hidden='true' className='shrink-0' />
+            <span>{availablePowerUp ? 'Coletar bônus' : 'Sem bônus'}</span>
+            {availablePowerUp && <span className='sr-only'>{availablePowerUp.label} disponível no tabuleiro</span>}
+          </span>
+          <span className={`min-w-0 flex-1 rounded-lg px-1 py-1.5 text-center ${isGoldenFood ? 'bg-amber-400/10 text-amber-200' : 'bg-white/[.03] text-zinc-500'}`}>
+            {isGoldenFood ? 'Dourada +3' : 'Comida +1'}
+            <span className='sr-only'> pontos base</span>
+          </span>
         </div>
       </div>
 
-      <div className='relative mx-auto mt-2 w-full max-w-[min(320px,calc(100svh-328px))] sm:mt-3 sm:max-w-md'>
+      <div className='relative mx-auto mt-2 w-full max-w-[min(320px,max(180px,calc(100svh-360px)))] sm:mt-3 sm:max-w-md'>
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
