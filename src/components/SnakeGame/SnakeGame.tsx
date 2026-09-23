@@ -391,75 +391,42 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='relative -mx-2 mt-4 sm:mx-0'>
-        <div
-          aria-live='polite'
-          className='pointer-events-none absolute inset-x-2 top-2 z-20 flex flex-col items-center gap-1.5 sm:inset-x-3 sm:top-3'
-        >
-          <AnimatePresence mode='popLayout'>
-            {latestReward && (
-              <motion.div
-                key={`reward-${latestReward.id}`}
-                role='status'
-                initial={{ opacity: 0, y: -12, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                className='flex w-full max-w-sm items-center gap-2 rounded-xl border border-amber-300/50 bg-zinc-950/95 px-3 py-2 text-left shadow-2xl backdrop-blur-md'
+      {/* Reserve space for notices so the board and controls never move mid-game. */}
+      <div
+        role='status'
+        aria-live='polite'
+        aria-atomic='true'
+        aria-label='Avisos do jogo'
+        className='pointer-events-none mt-3 grid h-24 grid-rows-4 gap-1 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-[10px] sm:text-xs'
+      >
+        <div className='flex min-w-0 items-center gap-1.5 text-amber-200'>
+          {latestReward ? (
+            <>
+              <Gift size={13} aria-hidden='true' className='shrink-0' />
+              <span
+                className='truncate'
+                title={`${latestReward.title} ${latestReward.description}`}
               >
-                <motion.div
-                  animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }}
-                  className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400/20 text-amber-300'
-                >
-                  <Gift size={17} aria-hidden='true' />
-                </motion.div>
-                <div className='min-w-0'>
-                  <strong className='block text-xs text-amber-200 sm:text-sm'>{latestReward.title}</strong>
-                  <span className='block text-[10px] text-zinc-300 sm:text-xs'>{latestReward.description}</span>
-                </div>
-              </motion.div>
-            )}
-
-            {isGoldenFood && (
-              <motion.div
-                key='golden-food'
-                role='status'
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className='rounded-full border border-amber-300/50 bg-zinc-950/95 px-3 py-1.5 text-[10px] font-semibold text-amber-200 shadow-xl backdrop-blur-md sm:text-xs'
-              >
-                🍎 Comida dourada: +3 pontos base
-              </motion.div>
-            )}
-
-            {availablePowerUp && (
-              <motion.div
-                key={`available-${powerUp?.type}`}
-                role='status'
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className='rounded-full border border-cyan-300/40 bg-zinc-950/95 px-3 py-1.5 text-[10px] text-cyan-100 shadow-xl backdrop-blur-md sm:text-xs'
-              >
-                <strong>{availablePowerUp.label}</strong> disponível — pegue no tabuleiro
-              </motion.div>
-            )}
-
-            {activePowerUpInfo && (
-              <motion.div
-                key={`active-${activePowerUp?.type}`}
-                role='status'
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                className='rounded-full border border-fuchsia-300/40 bg-zinc-950/95 px-3 py-1.5 text-[10px] font-semibold text-fuchsia-100 shadow-xl backdrop-blur-md sm:text-xs'
-              >
-                ⚡ {activePowerUpInfo.label} ativo
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {latestReward.title}
+                <span className='sr-only'> {latestReward.description}</span>
+              </span>
+            </>
+          ) : (
+            <span className='text-zinc-500'>Bônus e conquistas aparecem aqui</span>
+          )}
         </div>
+        <div className='min-w-0 truncate font-semibold text-fuchsia-200'>
+          {activePowerUpInfo && `⚡ ${activePowerUpInfo.label} ativo`}
+        </div>
+        <div className='min-w-0 truncate text-cyan-200'>
+          {availablePowerUp && `${availablePowerUp.label} disponível no tabuleiro`}
+        </div>
+        <div className='min-w-0 truncate text-amber-200'>
+          {isGoldenFood && '🍎 Comida dourada: +3 pontos base'}
+        </div>
+      </div>
 
+      <div className='relative -mx-2 mt-3 sm:mx-0'>
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
