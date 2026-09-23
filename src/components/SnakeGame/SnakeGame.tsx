@@ -396,13 +396,16 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='relative mx-auto mt-2 w-full max-w-[min(320px,max(180px,calc(100svh-360px)))] sm:mt-3 sm:max-w-md'>
+      <div className='relative mx-auto mt-2 w-full max-w-[min(352px,max(180px,calc(100svh-340px)))] sm:mt-3 sm:max-w-md'>
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           aria-label='Tabuleiro do Snake Game. No celular, deslize para mudar a direção.'
-          className='mx-auto grid aspect-square w-full max-w-md touch-none gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 sm:rounded-2xl'
-          style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
+          className='mx-auto grid aspect-square w-full max-w-md touch-none gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 p-2 sm:rounded-2xl sm:p-2.5'
+          style={{
+            gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${gridSize}, minmax(0, 1fr))`,
+          }}
         >
           {Array.from({ length: gridSize * gridSize }, (_, index) => {
             const key = `${index % gridSize},${Math.floor(index / gridSize)}`;
