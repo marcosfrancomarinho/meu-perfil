@@ -275,7 +275,7 @@ export function SnakeGame() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      className='relative mt-12 w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-6'
+      className='relative mt-6 w-full scroll-mt-2 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 p-3 backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-6'
     >
       <div className='flex items-center justify-between gap-3'>
         <div className='flex items-center gap-2'>
@@ -284,7 +284,7 @@ export function SnakeGame() {
           </div>
           <div>
             <h3 className='text-sm font-semibold sm:text-base'>Snake Game</h3>
-            <p className='text-[11px] text-zinc-500 sm:text-xs'>
+            <p className='hidden text-[11px] text-zinc-500 sm:block sm:text-xs'>
               Faça combos, pegue power-ups e sobreviva 🐍
             </p>
           </div>
@@ -313,25 +313,25 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4' aria-label='Estatísticas do jogo'>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
+      <div className='mt-2 grid grid-cols-4 gap-1 sm:mt-4 sm:gap-2' aria-label='Estatísticas do jogo'>
+        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
           <span className='block text-[10px] uppercase tracking-wide text-zinc-600'>Pontos</span>
           <strong aria-live='polite' className='text-sm text-green-400'>{score}</strong>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
+        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
           <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
             <Trophy size={10} aria-hidden='true' /> Recorde
           </span>
           <strong className='text-sm text-amber-400'>{highScore}</strong>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
+        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
           <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
             <Zap size={10} aria-hidden='true' /> Nível
           </span>
           <strong className='block text-sm text-blue-400'>{level}</strong>
-          <span className='block text-[9px] text-zinc-600'>{levelName}</span>
+          <span className='hidden text-[9px] text-zinc-600 sm:block'>{levelName}</span>
         </div>
-        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-2 py-2 text-center'>
+        <div className='rounded-xl border border-zinc-800 bg-zinc-950/60 px-1 py-1 text-center sm:px-2 sm:py-2'>
           <span className='flex items-center justify-center gap-1 text-[10px] uppercase tracking-wide text-zinc-600'>
             <Sparkles size={10} aria-hidden='true' /> Combo
           </span>
@@ -341,53 +341,7 @@ export function SnakeGame() {
           >
             ×{combo}
           </strong>
-          <span className='block text-[9px] text-zinc-600'>máx. ×{maxCombo}</span>
-        </div>
-      </div>
-
-      <div className='mt-3 flex flex-col gap-2 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3'>
-        <span className='flex items-center gap-1.5 text-[11px] text-zinc-500'>
-          <Palette size={13} aria-hidden='true' />
-          {nextLockedSkin
-            ? `Próxima cor: ${nextLockedSkin.name} no nível ${nextLockedSkin.unlockLevel}`
-            : 'Todas as cores desbloqueadas'}
-        </span>
-        <div className='flex flex-wrap items-center gap-2' aria-label='Cores da cobrinha'>
-          {SNAKE_SKINS.map((skin) => {
-            const unlocked =
-              skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
-            const selected = selectedSkin.id === skin.id;
-
-            return (
-              <button
-                key={skin.id}
-                type='button'
-                disabled={!unlocked}
-                onClick={() => selectSkin(skin.id)}
-                aria-label={
-                  unlocked
-                    ? `Usar cobrinha ${skin.name}`
-                    : `Cobrinha ${skin.name} bloqueada até o nível ${skin.unlockLevel}`
-                }
-                title={unlocked ? skin.name : `${skin.name}: nível ${skin.unlockLevel}`}
-                aria-pressed={selected}
-                className={`relative flex h-8 w-8 items-center justify-center rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
-                  selected
-                    ? 'border-white bg-white/10'
-                    : 'border-zinc-800 bg-zinc-900'
-                } ${unlocked ? 'hover:border-zinc-600' : 'cursor-not-allowed opacity-45'}`}
-              >
-                <span className={`h-3.5 w-3.5 rounded-[2px] ${skin.preview}`} />
-                {!unlocked && (
-                  <Lock
-                    size={10}
-                    aria-hidden='true'
-                    className='absolute -right-1 -bottom-1 rounded-full bg-zinc-950 text-zinc-500'
-                  />
-                )}
-              </button>
-            );
-          })}
+          <span className='hidden text-[9px] text-zinc-600 sm:block'>máx. ×{maxCombo}</span>
         </div>
       </div>
 
@@ -397,7 +351,7 @@ export function SnakeGame() {
         aria-live='polite'
         aria-atomic='true'
         aria-label='Avisos do jogo'
-        className='pointer-events-none mt-3 grid h-24 grid-rows-4 gap-1 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-[10px] sm:text-xs'
+        className='pointer-events-none mt-2 grid h-12 grid-cols-2 grid-rows-2 gap-x-2 gap-y-1 sm:mt-3 sm:h-24 sm:grid-cols-1 sm:grid-rows-4 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/40 px-2 py-1 text-[10px] sm:px-3 sm:py-2 sm:text-xs'
       >
         <div className='flex min-w-0 items-center gap-1.5 text-amber-200'>
           {latestReward ? (
@@ -426,7 +380,7 @@ export function SnakeGame() {
         </div>
       </div>
 
-      <div className='relative -mx-2 mt-3 sm:mx-0'>
+      <div className='relative mx-auto mt-2 w-full max-w-[min(320px,calc(100svh-328px))] sm:mt-3 sm:max-w-md'>
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -471,13 +425,13 @@ export function SnakeGame() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl bg-zinc-950/95 px-6 text-center backdrop-blur-sm sm:rounded-2xl'
+              className='absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4 rounded-xl bg-zinc-950/95 px-6 text-center backdrop-blur-sm sm:rounded-2xl'
             >
               <motion.div
                 initial={{ scale: 0.6, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 180, delay: 0.1 }}
-                className='relative flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28'
+                className='relative hidden h-24 w-24 sm:flex items-center justify-center sm:h-28 sm:w-28'
               >
                 <motion.div
                   animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.12, 1] }}
@@ -589,8 +543,58 @@ export function SnakeGame() {
         </AnimatePresence>
       </div>
 
-      <div className='mt-4 flex justify-center'>
+      <div className='mt-2 flex justify-center sm:mt-4'>
         <DPad onPress={setDirection} />
+      </div>
+
+      <details className='mt-2 text-xs text-zinc-400'>
+        <summary className='cursor-pointer py-1 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400'>
+          Cores e como jogar
+        </summary>
+      <div className='mt-3 flex flex-col gap-2 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3'>
+        <span className='flex items-center gap-1.5 text-[11px] text-zinc-500'>
+          <Palette size={13} aria-hidden='true' />
+          {nextLockedSkin
+            ? `Próxima cor: ${nextLockedSkin.name} no nível ${nextLockedSkin.unlockLevel}`
+            : 'Todas as cores desbloqueadas'}
+        </span>
+        <div className='flex flex-wrap items-center gap-2' aria-label='Cores da cobrinha'>
+          {SNAKE_SKINS.map((skin) => {
+            const unlocked =
+              skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
+            const selected = selectedSkin.id === skin.id;
+
+            return (
+              <button
+                key={skin.id}
+                type='button'
+                disabled={!unlocked}
+                onClick={() => selectSkin(skin.id)}
+                aria-label={
+                  unlocked
+                    ? `Usar cobrinha ${skin.name}`
+                    : `Cobrinha ${skin.name} bloqueada até o nível ${skin.unlockLevel}`
+                }
+                title={unlocked ? skin.name : `${skin.name}: nível ${skin.unlockLevel}`}
+                aria-pressed={selected}
+                className={`relative flex h-8 w-8 items-center justify-center rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                  selected
+                    ? 'border-white bg-white/10'
+                    : 'border-zinc-800 bg-zinc-900'
+                } ${unlocked ? 'hover:border-zinc-600' : 'cursor-not-allowed opacity-45'}`}
+              >
+                <span className={`h-3.5 w-3.5 rounded-[2px] ${skin.preview}`} />
+                {!unlocked && (
+                  <Lock
+                    size={10}
+                    aria-hidden='true'
+                    className='absolute -right-1 -bottom-1 rounded-full bg-zinc-950 text-zinc-500'
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className='mt-4 rounded-xl border border-zinc-800/70 bg-zinc-950/30 px-3 py-2 text-center text-[10px] text-zinc-600 sm:text-[11px]'>
@@ -601,6 +605,7 @@ export function SnakeGame() {
         <span className='sm:hidden'>Use os botões ou deslize no tabuleiro</span>
         <span className='hidden sm:inline'>Setas ou W A S D para mover • Espaço ou P para pausar</span>
       </p>
+      </details>
     </motion.section>
   );
 }
