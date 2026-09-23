@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  Check,
+  ChevronDown,
   Gamepad2,
   Gift,
   Lock,
@@ -561,64 +563,79 @@ export function SnakeGame() {
         <DPad onPress={setDirection} />
       </div>
 
-      <details className='mt-2 text-xs text-zinc-400'>
-        <summary className='cursor-pointer py-1 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400'>
-          Cores e como jogar
+      <details className='group mt-3 rounded-xl border border-white/10 bg-white/[.02] text-xs text-zinc-300'>
+        <summary className='flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl px-3 py-2 transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 [&::-webkit-details-marker]:hidden'>
+          <Palette size={15} aria-hidden='true' className='text-emerald-300' />
+          <span className='flex-1 font-medium'>Cores e dicas</span>
+          <ChevronDown size={15} aria-hidden='true' className='text-zinc-500 transition-transform group-open:rotate-180 motion-reduce:transition-none' />
         </summary>
-      <div className='mt-3 flex flex-col gap-2 rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3'>
-        <span className='flex items-center gap-1.5 text-[11px] text-zinc-500'>
-          <Palette size={13} aria-hidden='true' />
-          {nextLockedSkin
-            ? `Próxima cor: ${nextLockedSkin.name} no nível ${nextLockedSkin.unlockLevel}`
-            : 'Todas as cores desbloqueadas'}
-        </span>
-        <div className='flex flex-wrap items-center gap-2' aria-label='Cores da cobrinha'>
-          {SNAKE_SKINS.map((skin) => {
-            const unlocked =
-              skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
-            const selected = selectedSkin.id === skin.id;
 
-            return (
-              <button
-                key={skin.id}
-                type='button'
-                disabled={!unlocked}
-                onClick={() => selectSkin(skin.id)}
-                aria-label={
-                  unlocked
-                    ? `Usar cobrinha ${skin.name}`
-                    : `Cobrinha ${skin.name} bloqueada até o nível ${skin.unlockLevel}`
-                }
-                title={unlocked ? skin.name : `${skin.name}: nível ${skin.unlockLevel}`}
-                aria-pressed={selected}
-                className={`relative flex h-8 w-8 items-center justify-center rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
-                  selected
-                    ? 'border-white bg-white/10'
-                    : 'border-zinc-800 bg-zinc-900'
-                } ${unlocked ? 'hover:border-zinc-600' : 'cursor-not-allowed opacity-45'}`}
-              >
-                <span className={`h-3.5 w-3.5 rounded-[2px] ${skin.preview}`} />
-                {!unlocked && (
-                  <Lock
-                    size={10}
-                    aria-hidden='true'
-                    className='absolute -right-1 -bottom-1 rounded-full bg-zinc-950 text-zinc-500'
-                  />
-                )}
-              </button>
-            );
-          })}
+        <div className='space-y-4 border-t border-white/5 p-3 sm:p-4'>
+          <div>
+            <h4 className='font-semibold text-zinc-100'>Sua cobrinha</h4>
+            <p className='mt-1 text-[11px] leading-relaxed text-zinc-400'>
+              {nextLockedSkin
+                ? `Próxima cor: ${nextLockedSkin.name} no nível ${nextLockedSkin.unlockLevel}.`
+                : 'Todas as cores desbloqueadas. Escolha sua favorita!'}
+            </p>
+            <div className='mt-3 grid grid-cols-2 gap-2 min-[360px]:grid-cols-4' aria-label='Cores da cobrinha'>
+              {SNAKE_SKINS.map((skin) => {
+                const unlocked = skin.rewardId === null || unlockedRewardIds.includes(skin.rewardId);
+                const selected = selectedSkin.id === skin.id;
+
+                return (
+                  <button
+                    key={skin.id}
+                    type='button'
+                    disabled={!unlocked}
+                    onClick={() => selectSkin(skin.id)}
+                    aria-label={unlocked ? `Usar cobrinha ${skin.name}` : `Cobrinha ${skin.name} bloqueada até o nível ${skin.unlockLevel}`}
+                    aria-pressed={selected}
+                    className={`relative flex min-h-20 min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${
+                      selected ? 'border-emerald-400/60 bg-emerald-400/[.08]' : 'border-white/5 bg-black/15'
+                    } ${unlocked ? 'hover:border-emerald-300/50' : 'cursor-not-allowed'}`}
+                  >
+                    <span className={`mb-1 h-4 w-4 rounded-md ${skin.preview} ${unlocked ? '' : 'opacity-40'}`} />
+                    <span className={`text-[11px] ${unlocked ? 'text-zinc-200' : 'text-zinc-400'}`}>{skin.name}</span>
+                    <span className='flex items-center gap-1 text-[9px] text-zinc-400'>
+                      {selected ? <Check size={10} aria-hidden='true' className='text-emerald-300' /> : !unlocked ? <Lock size={9} aria-hidden='true' /> : null}
+                      {selected ? 'Em uso' : unlocked ? 'Disponível' : `Nível ${skin.unlockLevel}`}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className='border-t border-white/5 pt-3'>
+            <h4 className='flex items-center gap-2 font-semibold text-zinc-100'>
+              <Sparkles size={14} aria-hidden='true' className='text-violet-300' /> Poderes especiais
+            </h4>
+            <dl className='mt-2 space-y-2'>
+              {Object.entries(POWER_UP_INFO).map(([type, info]) => (
+                <div key={type} className='flex items-start gap-3 rounded-lg bg-black/15 p-2.5'>
+                  <span aria-hidden='true' className={`mt-1 h-2 w-2 shrink-0 rounded-full ${type === 'debug' ? 'bg-cyan-300' : type === 'double-xp' ? 'bg-fuchsia-400' : 'bg-emerald-300'}`} />
+                  <div className='min-w-0'>
+                    <dt className='text-[11px] font-medium text-zinc-200'>{info.label}</dt>
+                    <dd className='mt-0.5 text-[11px] leading-relaxed text-zinc-400'>{info.description}.</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className='border-t border-white/5 pt-3'>
+            <h4 className='flex items-center gap-2 font-semibold text-zinc-100'>
+              <Gamepad2 size={14} aria-hidden='true' className='text-sky-300' /> Como jogar
+            </h4>
+            <ul className='mt-2 space-y-2 text-[11px] leading-relaxed text-zinc-400'>
+              <li className='sm:hidden'>Deslize no tabuleiro ou use as setas para mudar de direção.</li>
+              <li className='hidden sm:block'>Use as setas ou W A S D para mover. Espaço ou P pausa o jogo.</li>
+              <li>Colete comidas em sequência para aumentar o combo.</li>
+              <li>A comida dourada vale 3 pontos base. Cuidado com os obstáculos a partir do nível 3.</li>
+            </ul>
+          </div>
         </div>
-      </div>
-
-      <div className='mt-4 rounded-xl border border-zinc-800/70 bg-zinc-950/30 px-3 py-2 text-center text-[10px] text-zinc-600 sm:text-[11px]'>
-        ⏱️ Câmera lenta = reduz a velocidade • 2× Pontos = pontos em dobro • 👻 Fantasma = atravessa corpo/obstáculos
-      </div>
-
-      <p className='mt-3 text-center text-[11px] text-zinc-600'>
-        <span className='sm:hidden'>Use os botões ou deslize no tabuleiro</span>
-        <span className='hidden sm:inline'>Setas ou W A S D para mover • Espaço ou P para pausar</span>
-      </p>
       </details>
     </motion.section>
   );
