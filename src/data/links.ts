@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Code2, Mail } from 'lucide-react';
+import { BriefcaseBusiness, Code2, Mail, Terminal } from 'lucide-react';
 import { FaSpotify } from 'react-icons/fa';
 import type { LinkItem } from '../types';
 
@@ -16,6 +16,13 @@ export const links: LinkItem[] = [
     href: 'https://github.com/marcosfrancomarinho',
     icon: Code2,
     color: 'violet',
+  },
+  {
+    title: 'Kit Dev',
+    description: 'Minha CLI para Node.js + TypeScript',
+    href: 'https://www.npmjs.com/package/create-kit-dev',
+    icon: Terminal,
+    color: 'pink',
   },
   {
     title: 'E-mail',
