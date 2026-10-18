@@ -33,7 +33,7 @@ export const links: LinkItem[] = [
   },
   {
     title: 'YouTube',
-    description: 'Minhas músicas e vídeos no canal',
+    description: 'Meu canal no YouTube',
     href: 'https://youtube.com/@marcosfrancomarinho?si=gQfuT1f8ipxE3BME',
     icon: FaYoutube,
     color: 'red',
