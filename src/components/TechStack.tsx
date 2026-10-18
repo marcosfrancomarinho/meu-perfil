@@ -37,9 +37,8 @@ export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
         <div id='about-profile-content' className='space-y-4 border-t border-white/10 px-4 pb-5 pt-4 sm:px-5'>
           <p className='text-sm font-medium text-blue-300'>Desenvolvedor de Software</p>
           <p className='text-sm leading-relaxed text-zinc-300'>
-            Sou desenvolvedor Full Stack e gosto de transformar ideias em soluções práticas.
-            Desenvolvo aplicações web, APIs e ferramentas para automatizar tarefas,
-            priorizando simplicidade, desempenho e código fácil de manter.
+            Desenvolvo aplicações web, APIs e ferramentas de automação, com foco em
+            simplicidade, desempenho e manutenção.
           </p>
           <div>
             <h3 className='mb-2 text-sm font-semibold text-zinc-100'>Habilidades e tecnologias</h3>
@@ -51,10 +50,6 @@ export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
               ))}
             </div>
           </div>
-          <p className='text-xs leading-relaxed text-zinc-400'>
-            Trabalho principalmente com TypeScript, Go e React, utilizando boas práticas,
-            SOLID, padrões de projeto e arquiteturas Clean e Hexagonal quando fazem sentido.
-          </p>
         </div>
       )}
     </motion.section>
