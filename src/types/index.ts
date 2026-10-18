@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-export type ColorKey = 'blue' | 'violet' | 'amber' | 'green' | 'pink';
+export type ColorKey = 'blue' | 'violet' | 'amber' | 'green' | 'pink' | 'red';
 
 export interface LinkItem {
   title: string;
