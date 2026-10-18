@@ -277,7 +277,7 @@ export function SnakeGame() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      className='relative mt-6 w-full scroll-mt-2 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-zinc-900 to-zinc-950 p-3 backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-6'
+      className='relative w-full scroll-mt-2 p-1 sm:p-3'
     >
       <div className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
