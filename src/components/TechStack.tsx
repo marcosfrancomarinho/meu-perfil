@@ -28,17 +28,14 @@ export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
           <Code2 size={24} aria-hidden='true' />
         </span>
         <span className='min-w-0 flex-1'>
-          <span className='block text-base font-semibold text-zinc-100 sm:text-lg'>Sobre mim e habilidades</span>
-          <span className='mt-1 block text-xs text-zinc-400 sm:text-sm'>Conheça meu trabalho e minhas tecnologias</span>
+          <span className='block text-base font-semibold text-zinc-100 sm:text-lg'>Sobre mim</span>
+          <span className='mt-1 block text-xs text-zinc-400 sm:text-sm'>O que faço e minhas habilidades</span>
         </span>
         <ChevronDown size={20} aria-hidden='true' className={`shrink-0 text-zinc-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
       </button>
       {expanded && (
         <div id='about-profile-content' className='space-y-4 border-t border-white/10 px-4 pb-5 pt-4 sm:px-5'>
-          <div>
-            <h2 className='text-lg font-bold'>Marcos Franco Marinho</h2>
-            <p className='mt-1 text-sm font-medium text-blue-300'>Desenvolvedor de Software</p>
-          </div>
+          <p className='text-sm font-medium text-blue-300'>Desenvolvedor de Software</p>
           <p className='text-sm leading-relaxed text-zinc-300'>
             Sou desenvolvedor Full Stack. Crio interfaces web, APIs e aplicações,
             trabalhando do front-end ao back-end com foco em código limpo,
