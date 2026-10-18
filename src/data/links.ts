@@ -1,5 +1,5 @@
 import { BriefcaseBusiness, Code2, Mail, Terminal } from 'lucide-react';
-import { FaSpotify } from 'react-icons/fa';
+import { FaSpotify, FaYoutube } from 'react-icons/fa';
 import type { LinkItem } from '../types';
 
 export const links: LinkItem[] = [
@@ -30,6 +30,13 @@ export const links: LinkItem[] = [
     href: 'mailto:marcosmarinho19998@gmail.com',
     icon: Mail,
     color: 'amber',
+  },
+  {
+    title: 'YouTube',
+    description: 'Minhas músicas e vídeos no canal',
+    href: 'https://youtube.com/@marcosfrancomarinho?si=gQfuT1f8ipxE3BME',
+    icon: FaYoutube,
+    color: 'pink',
   },
   {
     title: 'Spotify',
