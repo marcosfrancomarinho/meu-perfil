@@ -25,6 +25,12 @@ export const colorThemes: Record<ColorKey, ColorTheme> = {
     bg: 'bg-green-500/10',
     text: 'text-green-300',
   },
+  red: {
+    border: 'hover:border-red-500/60',
+    icon: 'text-red-500',
+    bg: 'bg-red-500/10',
+    text: 'text-red-300',
+  },
   pink: {
     border: 'hover:border-pink-500/60',
     icon: 'text-pink-400',
