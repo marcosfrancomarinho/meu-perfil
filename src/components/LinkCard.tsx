@@ -28,7 +28,7 @@ export function LinkCard({ link, index }: LinkCardProps) {
         <div className='absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full' />
       </div>
 
-      <div className='relative flex items-center justify-between gap-3 p-4 sm:p-5'>
+      <div className='relative flex min-h-26 items-center justify-between gap-3 p-4 sm:p-5'>
         <div className='flex min-w-0 items-center gap-3 sm:gap-4'>
           <motion.div
             whileHover={{ rotate: 15, scale: 1.15 }}
