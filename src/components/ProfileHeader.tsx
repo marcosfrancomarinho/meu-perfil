@@ -16,7 +16,7 @@ export function ProfileHeader({ name, avatarUrl }: ProfileHeaderProps) {
       transition={{ type: 'spring', stiffness: 120 }}
       className='relative my-6 flex flex-col items-center sm:my-8'
     >
-      <div className='relative h-40 w-40 sm:h-50 sm:w-50' style={{ perspective: 800 }}>
+      <div className='relative h-40 w-40 sm:h-50 sm:w-50' style={{ perspective: '650px' }}>
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
@@ -24,29 +24,37 @@ export function ProfileHeader({ name, avatarUrl }: ProfileHeaderProps) {
         />
         <motion.button
           type='button'
-          aria-label='Girar foto de perfil'
+          aria-label='Girar foto de perfil em 3D'
           onClick={() => setSpin((value) => value + 1)}
           initial={false}
           animate={{
             rotateY: spin * 360,
-            scale: [1, 1.15, 1.08, 1],
+            rotateX: [0, -12, 8, 0],
+            scale: [1, 1.18, 1.08, 1],
           }}
-          transition={{
-            duration: 1.1,
-            times: [0, 0.22, 0.7, 1],
-            ease: 'easeInOut',
-          }}
+          transition={{ duration: 1.35, times: [0, 0.2, 0.75, 1], ease: 'easeInOut' }}
           whileHover={{ scale: 1.05 }}
           className='relative h-full w-full cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-400'
-          style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+          style={{ transformStyle: 'preserve-3d' }}
         >
+          <span
+            aria-hidden='true'
+            className='absolute inset-0 rounded-full border-[8px] border-blue-800 bg-blue-950 shadow-[12px_12px_25px_rgba(0,0,0,.65),inset_0_0_18px_rgba(96,165,250,.35)]'
+            style={{ transform: 'translateZ(-9px)' }}
+          />
           <img
             src={avatarUrl}
             alt={`Foto de perfil de ${name}`}
             width={160}
             height={160}
-            className='h-full w-full rounded-full border-4 border-blue-500 object-cover shadow-[0_0_50px_rgba(59,130,246,.45)]'
+            className='absolute inset-0 h-full w-full rounded-full border-4 border-blue-500 object-cover shadow-[0_0_50px_rgba(59,130,246,.45)]'
+            style={{ transform: 'translateZ(9px)', backfaceVisibility: 'hidden' }}
             draggable={false}
+          />
+          <span
+            aria-hidden='true'
+            className='pointer-events-none absolute inset-0 rounded-full border-4 border-blue-400/70 bg-gradient-to-br from-blue-400/15 via-transparent to-black/35'
+            style={{ transform: 'rotateY(180deg) translateZ(9px)', backfaceVisibility: 'hidden' }}
           />
         </motion.button>
       </div>
