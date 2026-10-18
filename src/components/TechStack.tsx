@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, Code2 } from 'lucide-react';
+import { ChevronDown, UserRound } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface TechStackProps {
@@ -25,7 +25,7 @@ export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
         className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 sm:p-5'
       >
         <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-300 sm:h-14 sm:w-14'>
-          <Code2 size={24} aria-hidden='true' />
+          <UserRound size={24} aria-hidden='true' />
         </span>
         <span className='min-w-0 flex-1'>
           <span className='block text-base font-semibold text-zinc-100 sm:text-lg'>Sobre mim</span>
