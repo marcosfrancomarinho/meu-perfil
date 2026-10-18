@@ -1,4 +1,5 @@
-import { Code2 } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDown, Code2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface TechStackProps {
@@ -6,38 +7,59 @@ interface TechStackProps {
   startDelay?: number;
 }
 
-export function TechStack({ techs, startDelay = 0.5 }: TechStackProps) {
+export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: startDelay }}
-      aria-labelledby='skills-heading'
-      className='w-full rounded-2xl border border-white/10 bg-gradient-to-b from-zinc-900 to-zinc-950 p-4 shadow-lg shadow-black/20 sm:rounded-3xl sm:p-5'
+      className='w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-xl sm:rounded-3xl'
     >
-      <div className='mb-4 flex items-center gap-3'>
-        <span className='flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300'>
-          <Code2 size={22} aria-hidden='true' />
+      <button
+        type='button'
+        aria-expanded={expanded}
+        aria-controls='about-profile-content'
+        onClick={() => setExpanded((value) => !value)}
+        className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 sm:p-5'
+      >
+        <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-300 sm:h-14 sm:w-14'>
+          <Code2 size={24} aria-hidden='true' />
         </span>
-        <div>
-          <h2 id='skills-heading' className='text-sm font-semibold text-zinc-100 sm:text-base'>Habilidades</h2>
-          <p className='mt-1 text-xs text-zinc-400'>Tecnologias com as quais trabalho e estudo</p>
+        <span className='min-w-0 flex-1'>
+          <span className='block text-base font-semibold text-zinc-100 sm:text-lg'>Sobre mim e habilidades</span>
+          <span className='mt-1 block text-xs text-zinc-400 sm:text-sm'>Conheça meu trabalho e minhas tecnologias</span>
+        </span>
+        <ChevronDown size={20} aria-hidden='true' className={`shrink-0 text-zinc-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+      </button>
+      {expanded && (
+        <div id='about-profile-content' className='space-y-4 border-t border-white/10 px-4 pb-5 pt-4 sm:px-5'>
+          <div>
+            <h2 className='text-lg font-bold'>Marcos Franco Marinho</h2>
+            <p className='mt-1 text-sm font-medium text-blue-300'>Desenvolvedor de Software</p>
+          </div>
+          <p className='text-sm leading-relaxed text-zinc-300'>
+            Sou desenvolvedor Full Stack. Crio interfaces web, APIs e aplicações,
+            trabalhando do front-end ao back-end com foco em código limpo,
+            organização e manutenção de software.
+          </p>
+          <div>
+            <h3 className='mb-2 text-sm font-semibold text-zinc-100'>Habilidades e tecnologias</h3>
+            <div className='flex flex-wrap gap-2'>
+              {techs.map((tech) => (
+                <span key={tech} className='rounded-full border border-zinc-700 bg-zinc-800/80 px-3 py-1.5 text-xs text-zinc-200'>
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+          <p className='text-xs leading-relaxed text-zinc-400'>
+            Trabalho com TypeScript, Go, Java e React; aplico princípios SOLID,
+            padrões de projeto e arquiteturas Clean e Hexagonal para estruturar soluções.
+          </p>
         </div>
-      </div>
-      <div className='flex flex-wrap gap-2'>
-        {techs.map((tech, index) => (
-          <motion.span
-            key={tech}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: startDelay + 0.1 + index * 0.04 }}
-            whileHover={{ scale: 1.05, y: -2 }}
-            className='rounded-full border border-zinc-700/70 bg-zinc-800/70 px-3 py-1.5 text-xs text-zinc-200 sm:text-sm'
-          >
-            {tech}
-          </motion.span>
-        ))}
-      </div>
+      )}
     </motion.section>
   );
 }
