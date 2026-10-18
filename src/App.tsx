@@ -31,16 +31,16 @@ export function App() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className='w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-xl sm:rounded-3xl'
+            className='w-full overflow-hidden rounded-2xl border border-zinc-800 hover:border-lime-400/40 bg-zinc-900/70 backdrop-blur-xl sm:rounded-3xl'
           >
             <button
               type='button'
               aria-expanded={gameOpen}
               aria-controls='snake-card-content'
               onClick={() => setGameOpen((open) => !open)}
-              className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-400 sm:p-5'
+              className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-lime-400 sm:p-5'
             >
-              <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-300 sm:h-14 sm:w-14'>
+              <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime-400/10 text-lime-300 sm:h-14 sm:w-14'>
                 <Gamepad2 size={24} aria-hidden='true' />
               </span>
               <span className='min-w-0 flex-1'>
