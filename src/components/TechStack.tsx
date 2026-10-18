@@ -15,16 +15,16 @@ export function TechStack({ techs, startDelay = 0.2 }: TechStackProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: startDelay }}
-      className='w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-xl sm:rounded-3xl'
+      className='w-full overflow-hidden rounded-2xl border border-zinc-800 hover:border-cyan-400/40 bg-zinc-900/70 backdrop-blur-xl sm:rounded-3xl'
     >
       <button
         type='button'
         aria-expanded={expanded}
         aria-controls='about-profile-content'
         onClick={() => setExpanded((value) => !value)}
-        className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 sm:p-5'
+        className='flex min-h-26 w-full items-center gap-3 p-4 text-left transition hover:bg-white/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-400 sm:p-5'
       >
-        <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-300 sm:h-14 sm:w-14'>
+        <span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300 sm:h-14 sm:w-14'>
           <UserRound size={24} aria-hidden='true' />
         </span>
         <span className='min-w-0 flex-1'>
